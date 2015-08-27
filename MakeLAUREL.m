@@ -8,9 +8,9 @@ function LAUREL = MakeLAUREL(Angle_Crowns, NumBridges, Angle_Thick_Start, MYONod
 %% binding site will point--so really opposite (180) from the pointing of
 %% the co-linear cross-bridge head direction.
 a_Points=mod((120+[0;120;240]), 360); %[120; 240; 0];
-b_Points=mod((300+[0;120;240]), 360); %[120; 60; 180];
-c_Points=mod((120+[0;120;240]), 360);
-d_Points=mod((300+[0;120;240]), 360);
+b_Points=mod((300+[0;120;240]), 360); %[300; 60; 180];
+c_Points=mod((120+[0;120;240]), 360); %[120; 240; 0];
+d_Points=mod((300+[0;120;240]), 360); %[300; 60; 180];
 e_Points=mod((120+[0;120;240]), 360);
 f_Points=mod((300+[0;120;240]), 360);
 g_Points=mod((120+[0;120;240]), 360);

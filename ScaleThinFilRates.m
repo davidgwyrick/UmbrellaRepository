@@ -9,7 +9,7 @@ function [koff, kon, RuOff, RuOn, CaOff, CaOn] = ScaleThinFilRates( ScaleK1, Sca
 %% Ca binding dirctly to TnC
 % Ca binding, fast equilibrium, K=1e5 M^-1*sec^-1
 Keq=1e5*ScaleK1;
-koff=5*1e1; %sec-1
+koff=100;%5*1e1; %sec-1
 kon = Keq*koff;  % (M*sec)^-1,
 % Second Step, the TnI onto CaTnC
 % Transition State 1 to 2
@@ -21,5 +21,5 @@ RuOn=KaTnI*RuOff;
 % Thin filament State transition 2 to 0
 Kd=(1/(KaTnI*Keq))*ScaleK3;
 % The Ca being torn off and back to ground state
-CaOff=5;%2*1e1;
+CaOff=100;%5;%2*1e1;
 CaOn=CaOff/Kd; % The reverse, which essentially cannot happen

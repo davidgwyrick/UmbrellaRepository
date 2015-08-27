@@ -30,9 +30,9 @@ init_params;
 NumRuns = 4;
 pCaV = [4.0];
 HalfSL_Range = [1210];
-Pulse_Width_Range = [50]; %number of ms of Ca2+ pulse
-NumTwitch = 2; %number of twitches
-TimeBtwTwitches = [500]; %number of ms btw peak of pulses; i.e. if the pulse width range were 50ms and you
+Pulse_Width_Range = [100]; %number of ms of Ca2+ pulse
+NumTwitch = 2; %number of twitches Max: 3 twitches
+TimeBtwTwitches = [505]; %number of ms btw peak of pulses; i.e. if the pulse width range were 50ms and you
 % inputed a timeBtwTwitches to be 35ms, then the start of the second twitch
 % would begin as the first Ca Transient is going down
 % Rate_Range = [-0.1 -0.25 -0.5 -1.0];
@@ -91,11 +91,12 @@ for ipulse_width = 1:length(Pulse_Width_Range) %Loopthrough/do simulations on di
                                 filaments.XBFraction = XBKO;
                                 for kxscaler = kxscaler
                                     StiffScale.kxscaler = kxscaler;
+                                    Timestr=Strcat(datestr(clock,'yyyy_mm_dd_HHMM'));
                                     if strcmp(Ca_protocol,'None') == 1
-                                        %OutDir = ['DataFiles' filesep 'Kinetic_Rates' filesep 'Rate=', num2str(Rate), filesep];
+                                       % OutDir = ['DataFiles' filesep 'Kinetic_Rates' filesep Timestr,'Rate=', num2str(Rate), filesep];
                                         OutDir = ['DataFiles' filesep 'David_Test' filesep];
                                     else
-                                        %OutDir = ['DataFiles' filesep '_Rate=', num2str(Rate), '_SXB2=', num2str(tcparam.SXB2,'%1.2f'),'_SXB3=', num2str(tcparam.SXB3,'%1.2f'), ' ', num2str(pulse_width), 'ms ', Ca_protocol filesep];
+                                       % OutDir = ['DataFiles' filesep Timestr,'_Rate=', num2str(Rate), '_SXB2=', num2str(tcparam.SXB2,'%1.2f'),'_SXB3=', num2str(tcparam.SXB3,'%1.2f'), ' ', num2str(pulse_width), 'ms', Ca_protocol filesep];
                                         OutDir = ['DataFiles' filesep 'David_Test' filesep];
                                     end
                                    
@@ -130,10 +131,8 @@ end
 
 % Output time/force and time/FA graphs  -Axel
 clf(figure(1))
-TopDir = pwd;
-cd(OutDir)       %Kind of wonky because it has to redirect to the directory with the output files, then back again.
-plotTSwyrick(pCaV)
-cd(TopDir)
+plotTSwyrick(pCaV,OutDir)
+
 
 tEnd = toc(tStart);
 fprintf('\nTotal Time: %d minutes and %3.2f seconds\n',floor(tEnd/60),rem(tEnd,60))

@@ -11,9 +11,9 @@ DataParams.dt = 10^-3; %simulated time step in seconds; 1ms
 knockout.TnKOType = 0; %random along filament
 knockout.XBKOType = 0;
 knockout.TnFraction = 1; %1 means there are no knockouts along filament
-knockout.XB_Fraction = 1;
+knockout.XB_Fraction = 0;
 %%
-StiffScale.kxscaler = 3;
+StiffScale.kxscaler = 3; %3
 StiffScale.kascaler = 1;
 StiffScale.kmscaler = 1;
 %%

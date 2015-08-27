@@ -2,6 +2,7 @@ function HARDY = MakeHARDY()
 
 %% HARDY will be binding sites or actin node numbers:
 %HARDY=zeros(ThinRow_Index, floor(NumSites/3) );
+%each row faces the same direction
 HARDY=[
 % For actin node a)
 2:3:91;

@@ -6,9 +6,11 @@
 %   TimeSeriesAvg_pCa_5.25.txt
 %   TimeSeriesAvg_pCa_6.50.txt
 
-function plotTS(pCaRange)
+function plotTSwyrick(pCaRange,Outdir)
 
 %% David Plotting
+TopDir = pwd;
+cd(Outdir)
 clf(figure(1))
 subplot(4,1,1)
 hold on;
@@ -37,7 +39,7 @@ ylabel('Force(pN)')
     %Plot 3 of 4
     subplot(4,1,3)
     hold on;
-    printf('OKKKK')
+    
     xlabel('Time(s)')
     ylabel('TF Frac') %TF fraction available for binding
     plot(TimeSeries.data(:,1),TimeSeries.data(:,10), 'r-')
@@ -49,7 +51,8 @@ ylabel('Force(pN)')
     xlabel('Time(s)')
     ylabel('Force/CrossBridge')
     plot(TimeSeries.data(:,1),TimeSeries.data(:,3)./(TimeSeries.data(:,5)*720), 'k-')
-
+cd(TopDir)
+end
 %%
 
 
@@ -151,4 +154,3 @@ ylabel('Force(pN)')
 
 
 
-end
