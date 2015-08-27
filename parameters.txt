@@ -1,0 +1,70 @@
+TnKOType = 0;
+XBKOType = 0;
+
+Psi = 100;
+
+TnFraction = 1;
+XB_Fraction = 1;
+
+Tm_Type = 2;
+Coop_Type = 7;
+
+ScaleK1 = 1/100;
+ScaleK2 = 1;
+ScaleK3 = 1;
+
+kascaler = 1.0;
+kmscaler = 1.0;
+kxscaler = 3.0;
+
+START_LENGTH = 1150;
+
+LACT = 37.3/3;
+LMYO = 42.9/3;
+
+KACT_0 = 1743;
+KMYO_0 = 2020;
+
+NACT = 8
+NMYO = 4;
+NumBridges = 60 + 1;
+NumSites = 90 + 1;
+
+HeadIndex = 12; % unused
+
+N_Thick_Start = 3;
+Angle_thick_Start = 120;
+Angle_Crowns = 40;
+ThinRow_Index = 24; % unused
+
+K_TITIN = 0.1344;
+FP_TITIN = 50;
+
+NTn = 46;
+
+pCa = 4.0;
+
+DataSpan = 0.1;
+
+RequestedRuns = 0;
+
+SXB1 = 1;
+SXB2 = 1;
+SXB3 = 1;
+
+eta = 0.685;
+f1 = 0.28;
+
+y0 = 20;
+SlopeL = -100;
+SlopeR = 20;
+xL = -1;
+xR - 1;
+
+AA = 1;
+
+ATP = 5e-3;
+ADP = 30e-6;
+phos = 3e-3;
+
+T = 273.15;
