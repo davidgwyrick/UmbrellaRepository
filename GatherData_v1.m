@@ -17,10 +17,12 @@ function [OutTotal]=GatherData_v1(OutTotal, DataDir, pCa)
 % run for the simulation.
 for i=1:length(pCa)
     OutTotal{i, 1}=pCa(i,1);
-
+    Topdir=pwd;
+    cd(DataDir)
     %% First bring in the time series data; strip the file name exactly as
     %% used to write the text file, at the end of Run_v1.m
-    InFile=sprintf('%sTimeSeriesAvg_pCa_%s.txt', DataDir, num2str(pCa(i,1), '%3.2f'));
+    InFile=sprintf('TimeSeriesAvg_pCa_%s.txt',num2str(pCa(i,1), '%3.2f'));
+    %InFile=sprintf('%sTimeSeriesAvg_pCa_%s.txt', DataDir, num2str(pCa(i,1), '%3.2f'));
     %% Import the time series data, strip the numeric data and load it into
     %% the cell array (col 2)
     InData=importdata(InFile);
@@ -28,13 +30,16 @@ for i=1:length(pCa)
 
     % Now repeat the same for the SSData at col 3 and the HalfTimeData at
     % col 4
-    InFile=sprintf('%sSSData_pCa_%s.txt', DataDir, num2str(pCa(i,1), '%3.2f'));
+    %InFile=sprintf('%sSSData_pCa_%s.txt', DataDir, num2str(pCa(i,1), '%3.2f'));
+    InFile=sprintf('SSData_pCa_4.00_ROI_A.txt');
     InData=importdata(InFile);
     OutTotal{i,3}=InData.data;
 
-    InFile=sprintf('%sHalfTimeData_pCa_%s.txt', DataDir, num2str(pCa(i,1), '%3.2f'));
+    InFile=sprintf('HalfTimeData_pCa_%s.txt', num2str(pCa(i,1), '%3.2f'));
+    %InFile=sprintf('%sHalfTimeData_pCa_%s.txt', DataDir, num2str(pCa(i,1), '%3.2f'));
     InData=importdata(InFile);
     OutTotal{i,4}=InData.data;
+    cd(Topdir);
 end
 
 

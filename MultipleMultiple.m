@@ -30,7 +30,7 @@ init_params;
 NumRuns = 4;
 pCaV = [4.0];
 HalfSL_Range = [1210];
-Pulse_Width_Range = [100]; %number of ms of Ca2+ pulse
+Pulse_Width_Range = [80]; %number of ms of Ca2+ pulse
 NumTwitch = 2; %number of twitches Max: 3 twitches
 TimeBtwTwitches = [505]; %number of ms btw peak of pulses; i.e. if the pulse width range were 50ms and you
 % inputed a timeBtwTwitches to be 35ms, then the start of the second twitch
@@ -93,11 +93,11 @@ for ipulse_width = 1:length(Pulse_Width_Range) %Loopthrough/do simulations on di
                                     StiffScale.kxscaler = kxscaler;
                                     Timestr=Strcat(datestr(clock,'yyyy_mm_dd_HHMM'));
                                     if strcmp(Ca_protocol,'None') == 1
-                                       % OutDir = ['DataFiles' filesep 'Kinetic_Rates' filesep Timestr,'Rate=', num2str(Rate), filesep];
-                                        OutDir = ['DataFiles' filesep 'David_Test' filesep];
+                                        OutDir = ['DataFiles' filesep 'Kinetic_Rates' filesep Timestr,'Rate=', num2str(Rate), filesep];
+                                       % OutDir = ['DataFiles' filesep 'David_Test' filesep];
                                     else
-                                       % OutDir = ['DataFiles' filesep Timestr,'_Rate=', num2str(Rate), '_SXB2=', num2str(tcparam.SXB2,'%1.2f'),'_SXB3=', num2str(tcparam.SXB3,'%1.2f'), ' ', num2str(pulse_width), 'ms', Ca_protocol filesep];
-                                        OutDir = ['DataFiles' filesep 'David_Test' filesep];
+                                        OutDir = ['DataFiles' filesep Timestr,'Rate=', num2str(Rate), '_SXB2=', num2str(tcparam.SXB2,'%1.2f'),'_SXB3=', num2str(tcparam.SXB3,'%1.2f'), ' ', num2str(pulse_width), 'ms', Ca_protocol filesep];
+                                       % OutDir = ['DataFiles' filesep 'David_Test' filesep];
                                     end
                                    
                                     mkdir(OutDir);
@@ -108,6 +108,8 @@ for ipulse_width = 1:length(Pulse_Width_Range) %Loopthrough/do simulations on di
                                         [Steps, Stats, IndexThalf, Binder] = RunSeveral(NumRuns, DataParams, Muscle_Type, StartLength, pCa_in, StiffScale, filaments, knockout, coop, TFRateScale, tcparam, Rate, Ca_protocol, pulse_width,NumTwitch,TimeBtwTwitches);
                                         WriteText(OutDir, pCa_in, DataParams.dt, Binder, Steps, Stats, IndexThalf);
                                         WriteTon(DataParams.dt, OutDir, pCa_in, OutDir, knockout.XB_Fraction, Stats);
+%                                         clf(figure(1))
+%                                         plotTSwyrick(pCaV,OutDir,Ca_protocol,pulse_width)
                                     end
                                 end
                             end
@@ -130,9 +132,13 @@ end
 % end
 
 % Output time/force and time/FA graphs  -Axel
-clf(figure(1))
-plotTSwyrick(pCaV,OutDir)
+% clf(figure(1))
+%plotTSwyrick(pCaV,OutDir,Ca_protocol,Pulse_Width_Range)
+Data{1,4}=[];%{pCaV,Steps,Binder,IndexThalf};
+Data=GatherData_v1(Data,OutDir,pCaV)
 
 
 tEnd = toc(tStart);
+Process_HillCurves_v1(pCaV,OutDir,Data,3,Ca_protocol,knockout.TnFraction,knockout.XB_Fraction)
+
 fprintf('\nTotal Time: %d minutes and %3.2f seconds\n',floor(tEnd/60),rem(tEnd,60))

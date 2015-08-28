@@ -11,7 +11,7 @@ DataParams.dt = 10^-3; %simulated time step in seconds; 1ms
 knockout.TnKOType = 0; %random along filament
 knockout.XBKOType = 0;
 knockout.TnFraction = 1; %1 means there are no knockouts along filament
-knockout.XB_Fraction = 0;
+knockout.XB_Fraction = 1;
 %%
 StiffScale.kxscaler = 3; %3
 StiffScale.kascaler = 1;
@@ -27,7 +27,7 @@ filaments.NMYO = 4; %Number of thick filaments
 filaments.NumBridges = 60 + 1; % 60 cross bridges per filament + handel
 filaments.NumSites = 90 + 1; % 90 RU sites per filament + handel
 filaments.N_Thick_Start = 3; %Number of myosin heads per XB "Crown"
-filaments.NTn = 46; %??
+filaments.NTn = 46; % Number of Troponin per filament
 filaments.KACT_0 = 1743; %Spring constant of actin in pN/nm
 filaments.KMYO_0 = 2020; %Spring constant of myosin in pN/nm
 filaments.K_TITIN = 0.1344; %Spring constant of titin

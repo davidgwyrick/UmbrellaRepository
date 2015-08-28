@@ -179,7 +179,7 @@ for ROI_index = 1:length(ROIRange)
     title(['Set: ' num2str(SetNumber) ', pCa=' num2str(pCa)])
     
     subplot(2,2,2)
-    errorbar(1, mean(N_raw)/mean(N_raw), std(ton_raw)/mean(N_raw), 'ko', 'markerfacecolor', 'k');, hold on
+    errorbar(1, mean(N_raw)/mean(N_raw), std(ton_raw)/mean(N_raw), 'ko', 'markerfacecolor', 'k'); hold on
     errorbar(2, mean(Pct_full), std(Pct_full), 'ko', 'markerfacecolor', 'g');, hold on
     errorbar(3, mean(Pct_back), std(Pct_back), 'ko', 'markerfacecolor', 'm');
     set(gca, 'box', 'off')

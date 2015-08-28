@@ -6,19 +6,20 @@
 %   TimeSeriesAvg_pCa_5.25.txt
 %   TimeSeriesAvg_pCa_6.50.txt
 
-function plotTSwyrick(pCaRange,Outdir)
+function plotTSwyrick(pCaRange,Outdir,Ca_protocol,pulse_width)
 
 %% David Plotting
-TopDir = pwd;
-cd(Outdir)
-clf(figure(1))
-subplot(4,1,1)
-hold on;
 
-xlabel('Time(s)')
-ylabel('Force(pN)')
+    TopDir = pwd;
+    cd(Outdir)
+    clf(figure(1))
+    subplot(4,1,1)
+    hold on;
 
-    
+    xlabel('Time(s)')
+    ylabel('Force(pN)')
+    axis([0 2 0 1000],'on')
+    set(gca,'YTick',0:250:1000)
     pCa = num2str(pCaRange(1),'%3.2f');
     filename=strcat('TimeSeriesAvg_pCa_',pCa,'.txt');
     
@@ -33,12 +34,16 @@ ylabel('Force(pN)')
 
     xlabel('Time(s)')
     ylabel('pCa')
+    axis([0 2 3 7],'on')
     set(gca, 'ydir', 'reverse')
+    
+    
     plot(TimeSeries.data(:,1),TimeSeries.data(:,12), 'k-')
     
     %Plot 3 of 4
     subplot(4,1,3)
     hold on;
+    axis([0 2 0 1],'on')
     
     xlabel('Time(s)')
     ylabel('TF Frac') %TF fraction available for binding
@@ -47,12 +52,16 @@ ylabel('Force(pN)')
     %Plot 4 of 4
     subplot(4,1,4)
     hold on;
-
+    axis([0 2 0 60],'on')
+    set(gca,'YTick',0:20:60)
     xlabel('Time(s)')
     ylabel('Force/CrossBridge')
     plot(TimeSeries.data(:,1),TimeSeries.data(:,3)./(TimeSeries.data(:,5)*720), 'k-')
-cd(TopDir)
+   % filename='Quickplot'
+   % saveas(h,'Quickplot',Ca_protocol,num2str(pulse_width),'ms.png')
+    cd(TopDir)
 end
+
 %%
 
 

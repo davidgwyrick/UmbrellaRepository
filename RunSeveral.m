@@ -130,11 +130,11 @@ LAUREL = MakeLAUREL(filaments.Angle_Crowns, NumBridges, filaments.Angle_Thick_St
 Big_Binder = {};
 
 %% Data per time step, averaged across runs
-MFvec = zeros(1,NSTEPS);
-AFvec = zeros(1,NSTEPS);
-FractXB1 = zeros(1,NSTEPS);
-FractXB2 = zeros(1,NSTEPS);
-FractCa0 = zeros(1,NSTEPS);
+MFvec = zeros(1,NSTEPS); %Myosin Fraction vector?
+AFvec = zeros(1,NSTEPS); %Actin Fraction vector?   
+FractXB1 = zeros(1,NSTEPS); %Fraction of myosin binding sites in unbound state
+FractXB2 = zeros(1,NSTEPS); %fraction of myosin binding sites in bound pre-power state
+FractCa0 = zeros(1,NSTEPS); %Fraction of ...
 FractCa1 = zeros(1,NSTEPS);
 FractCa2 = zeros(1,NSTEPS);
 ATPuse = zeros(1,NSTEPS);
