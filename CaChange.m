@@ -24,7 +24,7 @@ switch Ca_protocol
         
     case 'Twitch'
         CaChange_index = (0.25*10^-7)*ones(NSTEPS,1);
-        Ca_0 = 0.075*10^(-6); % 0.1399*10^(-6)molar Resting Diastolic Calcium concentration 
+        Ca_0 = 0.14*10^(-6); % 0.1399*10^(-6)molar Resting Diastolic Calcium concentration 
         Ca_max =10^(-New_pCa); %0.3431*10^(-6)molar is pCa of 6.46 Ca Transient Max concentration at Time to Peak (48.2ms)
         tao=.5*pulse_width;
         for indy=1:NSTEPS  

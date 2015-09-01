@@ -21,5 +21,5 @@ RuOn=KaTnI*RuOff;
 % Thin filament State transition 2 to 0
 Kd=(1/(KaTnI*Keq))*ScaleK3;
 % The Ca being torn off and back to ground state
-CaOff=20;%5;%2*1e1;
+CaOff=40;%5;%2*1e1;
 CaOn=CaOff/Kd; % The reverse, which essentially cannot happen

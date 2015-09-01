@@ -3,8 +3,9 @@
 %% MOD HERE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%Calcium protocol
 %protocol = 'Step';  %pCa values available: 5.5 and 8.0
-%protocol = 'Burst';  %pCa values available: 4.0, 5.0, 5.5
-protocol = 'Train'; %pCa values available: 4.0, 5.0, 5.5
+protocol = 'Burst';  %pCa values available: 4.0, 5.0, 5.5
+%protocol = 'Train'; %pCa values available: 4.0, 5.0, 5.5
+%protocol = 'Twitch'
 
 plot_pCa = 4.0; %See Available pCa above
 Pulse_Width = 50; %30, 40, or 50, but does NOT apply to 'Step' protocol
@@ -22,12 +23,14 @@ elseif strcmp(protocol,'Burst') == 1
     pCa_Range = [4.0, 5.0, 5.5];
 elseif strcmp(protocol,'Step') == 1
     pCa_Range = [5.5, 8.0];
+elseif strcmp(protocol,'Twitch') == 1
+    pCa_Range = [4.0, 5.0, 5.5]
 end
 
-Pulse_Width_Range = [50]; %set to 30, 40, or 50. Or can use all 3, and then add a 4th dimension to the variables.
+Pulse_Width_Range = [80]; %set to 30, 40, or 50. Or can use all 3, and then add a 4th dimension to the variables.
 
-SXB2_Range = [0.5 1];
-SXB3_Range = [0.1 1];
+SXB2_Range = [.5 1];
+SXB3_Range = [.1 1];
 
 prcnt_Full = zeros(length(SXB2_Range),length(SXB3_Range),length(pCa_Range));  %prcnt_Full @ (SXB2 index, SXB3 index, pCa index)
 ton_Full = zeros(length(SXB2_Range),length(SXB3_Range),length(pCa_Range));
@@ -52,10 +55,14 @@ for ipulse_width = 1:length(Pulse_Width_Range)
                 foldername = ['Muscle=Soleus_Rate=0_HalfSl=1210_SXB2=',SXB2,'_SXB3=',SXB3,' ', pulse_width, 'ms Burst\'];
             elseif strcmp(protocol,'Step') == 1
                 foldername = ['Muscle=Soleus_Rate=0_HalfSl=1210_SXB2=',SXB2,'_SXB3=',SXB3,' Step\'];
-            end          
+            elseif strcmp(protocol,'Twitch') == 1
+                %foldername = ['Vary_pCa_90msTwitch'];
+                foldername = ['80msTwitch\'];
+            end
             for ipCa = 1:length(pCa_Range)
                 pCa = num2str(pCa_Range(ipCa),'%1.2f');
                 filepath = ['J:\TannerBertGroup\GraduateStudents\Axel_Fenwick\Sims\Vert_3Alex\DataFiles\SXB2v3_CaProtocols/',foldername,'SS_ton_AVG_pCa_',pCa,'_ROI_A.txt'];
+%                 filepath = ['J:\TannerBertGroup\Sims\David_Wyrick\UmbrellaRepository\DataFiles\',foldername,'SS_ton_AVG_pCa_',pCa,'_ROI_A.txt'];
                 Data = importdata(filepath);
                 prcnt_Full(iSXB2,iSXB3,ipCa) = Data.data(13);
                 ton_Full(iSXB2,iSXB3,ipCa) = Data.data(11);
@@ -63,11 +70,13 @@ for ipulse_width = 1:length(Pulse_Width_Range)
                 ton_ms(iSXB2,iSXB3,ipCa) = Data.data(7);
                 
                 filepath = ['J:\TannerBertGroup\GraduateStudents\Axel_Fenwick\Sims\Vert_3Alex\DataFiles\SXB2v3_CaProtocols/',foldername,'SSData_pCa_',pCa,'_ROI_A.txt'];
+%                 filepath = ['J:\TannerBertGroup\Sims\David_Wyrick\UmbrellaRepository\DataFiles\',foldername,'SSData_pCa_',pCa,'_ROI_A.txt'];
                 Data = importdata(filepath);
                 Force(iSXB2,iSXB3,ipCa) = mean(Data.data(:,3));
                 Force_std(iSXB2,iSXB3,ipCa) = std(Data.data(:,3));
                 
                 filepath = ['J:\TannerBertGroup\GraduateStudents\Axel_Fenwick\Sims\Vert_3Alex\DataFiles\SXB2v3_CaProtocols/',foldername,'TimeSeriesAvg_pCa_',pCa,'.txt'];
+%                 filepath = ['J:\TannerBertGroup\Sims\David_Wyrick\UmbrellaRepository\DataFiles\',foldername,'TimeSeriesAvg_pCa_',pCa,'.txt'];
                 Data = importdata(filepath);
                 TS_Time(iSXB2,iSXB3,ipCa) = {Data.data(:,1)};
                 TS_Force(iSXB2,iSXB3,ipCa) = {Data.data(:,2)};

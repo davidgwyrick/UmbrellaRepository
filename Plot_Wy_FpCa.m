@@ -1,122 +1,276 @@
 %pCa_Range = [4.0, 4.5, 5.0, 5.5, 5.7, 5.8, 5.9, 6.0, 6.1, 6.25, 6.5, 7.0, 8.0];
-pCa_Range= [4 5 5.5 5.75 6 6.5 7 8];
+%pCa_Range= [4 5 5.5 5.75 6 6.5 7 8];
+pCa_Range= [4 5 5.5]
+Pulse_Width = 90;
 %RateRange = [0]; %-
 
 
-prcnt_Full = zeros(1,length(pCa_Range));
-ton_Full = zeros(1,length(pCa_Range));
-ton_Back = zeros(1,length(pCa_Range));
-ton_ms = zeros(1,length(pCa_Range));
-Force = zeros(1,length(pCa_Range));
-Force_std = zeros(1,length(pCa_Range));
+% prcnt_Full = zeros(1,length(pCa_Range));
+% stdv_prcnt_Full = zeros(1,length(pCa_Range));
+% ton_Full = zeros(1,length(pCa_Range));
+% stdv_ton_Full = zeros(1,length(pCa_Range));
+% ton_Back = zeros(1,length(pCa_Range));
+% stdv_ton_Back = zeros(1,length(pCa_Range));
+% ton_ms = zeros(1,length(pCa_Range));
+% stdv_ton_ms=zeros(1,length(pCa_Range));
+% Force = zeros(1,length(pCa_Range));
+% Force_std = zeros(1,length(pCa_Range));
+prcnt_Full = {{},{},{}};
+prcnt_Back = {{},{},{}};
+ton_Full = {{},{},{}};
+ton_Back = {{},{},{}};
+ton_ms = {{},{},{}};
+XBF_Raw = {{},{},{}};
+XBF_Full = {{},{},{}};
+XBF_Back = {{},{},{}};
+XBF_EnRaw = {{},{},{}};
+XBF_EnFull = {{},{},{}};
+XBF_EnBack = {{},{},{}};
+Force = {{},{},{}};
 
+TS_Time = {{},{},{}};  % TimeSeries Time @ (SXB2 index, SXB3 index, pCa index)
+TS_Force = {{},{},{}}; % TimeSeries Force @ (SXB2 index, SXB3 index, pCa index)
+Ca_level = {{},{},{}};
 
 %addpath('J:\TannerBertGroup\GraduateStudents\Axel_Fenwick\Sims\Vert_3Alex')
+%foldername = ['Vary_pCa_90msTwitch\'];
+%foldername = ['80msTwitch\'];
+foldername = ['400msTwitch\'];
 
 
-
-foldername = ['SSdataTest\'];
+%foldername = ['SSdataTest\'];
 for ipCa = 1:length(pCa_Range)
     pCa = num2str(pCa_Range(ipCa),'%1.2f');
     %filepath = ['J:\TannerBertGroup\GraduateStudents\Axel_Fenwick\Sims\Vert_3Alex\DataFiles/',foldername,'SS_ton_AVG_pCa_',pCa,'_ROI_A.txt'];
-    filepath = ['J:\TannerBertGroup\Sims\David_Wyrick\UmbrellaRepository\DataFiles\',foldername,'SS_ton_AVG_pCa_',pCa,'_ROI_A.txt'];
+    filepath = ['J:\TannerBertGroup\Sims\David_Wyrick\UmbrellaRepository\DataFiles\',foldername,'SS_ton_Raw_pCa_',pCa,'_ROI_A.txt'];
     Data = importdata(filepath);
-    prcnt_Full(1,ipCa) = Data.data(13);
-    ton_Full(1,ipCa) = Data.data(11);
-    ton_Back(1,ipCa) = Data.data(15);
-    ton_ms(1,ipCa) = Data.data(7);
+    
+    prcnt_Full(ipCa) = {Data.data(:,7)};
+    prcnt_Back(ipCa) = {Data.data(:,9)};
+    ton_Full(ipCa) = {Data.data(:,6)};
+    ton_Back(ipCa) = {Data.data(:,8)};
+    ton_ms(ipCa) = {Data.data(:,4)};
+    XBF_Raw(ipCa) = {Data.data(:,10)};
+    XBF_Full(ipCa) = {Data.data(:,11)};
+    XBF_Back(ipCa) = {Data.data(:,12)};
+    XBF_EnRaw(ipCa) = {Data.data(:,13)};
+    XBF_EnFull(ipCa) = {Data.data(:,14)};
+    XBF_EnBack(ipCa) = {Data.data(:,15)};
 
     filepath = ['J:\TannerBertGroup\Sims\David_Wyrick\UmbrellaRepository\DataFiles\',foldername,'SSData_pCa_',pCa,'_ROI_A.txt'];
     Data = importdata(filepath);
-    Force(1,ipCa) = mean(Data.data(:,3));
-    Force_std(1,ipCa) = std(Data.data(:,3));
+%     Force(1,ipCa) = mean(Data.data(:,3));
+%     Force_std(1,ipCa) = std(Data.data(:,3));
+    
+    filepath = ['J:\TannerBertGroup\Sims\David_Wyrick\UmbrellaRepository\DataFiles\',foldername,'TimeSeriesAvg_pCa_',pCa,'.txt'];
+    Data = importdata(filepath);
+    TS_Time(ipCa) = {Data.data(:,1)};
+    TS_Force(ipCa) = {Data.data(:,2)};
+    Ca_level(ipCa) = {Data.data(:,12)};
 end
- 
-clf(figure(3))
-plot(pCa_Range,Force)
-set(gca,'XDir','Reverse')
-xlabel('pCa');
-ylabel('Force (pN)');
 
-% clf(figure(3))
-% plot(pCa_Range, squeeze(Force(1,1,:)), pCa_Range, squeeze(Force(2,2,:)))
-% % plot(pCa_Range, squeeze(Force(1,3,:))), hold on
-% % plot(pCa_Range, squeeze(Force(3,1,:))), hold on
-% set(gca,'XDir','Reverse')
-% xlabel('pCa');
-% ylabel('Force (pN)');
-% %legend('SXB2/3 = 0.5/0.1','SXB2/3 = 1/1',  'location', 'Northwest')
+%% Timeseries Curves
+Trace_1X=TS_Time{1};
+Trace_1Y=TS_Force{1};
+Trace_1Label = ['pCa=',num2str(pCa_Range(1))];
+Trace_2X=TS_Time{2};
+Trace_2Y=TS_Force{2};
+Trace_2Label = ['pCa=',num2str(pCa_Range(2))];
+Trace_3X=TS_Time{3};
+Trace_3Y=TS_Force{3};
+Trace_3Label = ['pCa=',num2str(pCa_Range(3))];
 
-% 
-% Force(:,:,5) = 0; 
-% Force_std(:,:,5) = 0;
-% pCa_Range(5) = 8.0;
-
-[head1, coeff1]=Process_3ParamHill_Anal_v2(pCa_Range', squeeze(Force(1,1,:)));
-[head2, coeff2]=Process_3ParamHill_Anal_v2(pCa_Range', squeeze(Force(2,2,:)));
-% [head3, coeff3]=Process_3ParamHill_Anal_v2(pCa_Range', squeeze(Force(1,3,:)));
-% [head4, coeff4]=Process_3ParamHill_Anal_v2(pCa_Range', squeeze(Force(3,1,:)));
-
-fprintf('\nFor SXB2 of 0.5 and SXB3 of 0.1\nFmax = %4.2f\nHill Coeff = %4.2f\npCa50 = %4.2f [%4.2f to %4.2f]\n',coeff1(1,1), coeff1(2,1), coeff1(3,1), coeff1(3,4),coeff1(3,5))
-fprintf('\nFor SXB2 of 1 and SXB3 of 1\nFmax = %4.2f\nHill Coeff = %4.2f\npCa50 = %4.2f [%4.2f to %4.2f]\n',coeff2(1,1), coeff2(2,1), coeff2(3,1), coeff2(3,4),coeff2(3,5))
-
-text(50,50, sprintf('For SXB2 of 0.5 and SXB3 of 0.1\nFmax = %4.2f\nHill Coeff = %4.2f\npCa50 = %4.2f [%4.2f to %4.2f]\n\nFor SXB2 of 1 and SXB3 of 1\nFmax = %4.2f\nHill Coeff = %4.2f\npCa50 = %4.2f [%4.2f to %4.2f]\n',coeff1(1,1), coeff1(2,1), coeff1(3,1), coeff1(3,4),coeff1(3,5),coeff2(1,1), coeff2(2,1), coeff2(3,1), coeff2(3,4),coeff2(3,5)));
-
-clf(figure(4))
-subplot(2,2,1)
-plot([4:0.02:9], (coeff1(1,1)./(1+10.^(coeff1(2,1)*([4:0.02:9] - coeff1(3,1))))),...
-     [4:0.02:9], (coeff2(1,1)./(1+10.^(coeff2(2,1)*([4:0.02:9] - coeff2(3,1)))))), hold on
-%     [4:0.02:9], (coeff3(1,1)./(1+10.^(coeff3(2,1)*([4:0.02:9] - coeff3(3,1))))),...
-%     [4:0.02:9], (coeff4(1,1)./(1+10.^(coeff4(2,1)*([4:0.02:9] - coeff4(3,1)))))), hold on
-
-legend('SXB2/3 = 0.5/0.1','SXB2/3 = 1/1',  'location', 'Northwest')%,'SXB2/3 = 0.1/0.5','SXB2/3 = 0.5/0.1',  'location', 'Northwest')
-errorbar(pCa_Range, squeeze(Force(1,1,:)), squeeze(Force_std(1,1,:)),'bo')
-errorbar(pCa_Range, squeeze(Force(2,2,:)), squeeze(Force_std(2,2,:)),'ko')
-% errorbar(pCa_Range, squeeze(Force(1,3,:)), squeeze(Force_std(1,3,:)), 'ro')
-% errorbar(pCa_Range, squeeze(Force(3,1,:)), squeeze(Force_std(3,1,:)), 'co')
-title('Force/pCa')
+%Force/time curves overplot
+clf(figure(2))
+subplot(3,1,1);
+hold on;
+plot(Trace_1X,Trace_1Y,'k-'),hold on
+plot(Trace_2X,Trace_2Y,'r-'),hold on
+plot(Trace_3X,Trace_3Y,'g-'),hold on
+xlabel('Time(s)')
 ylabel('Force (pN)')
-xlabel('pCa')
-set(gca, 'xdir', 'reverse')
+title('400ms Twitch at different pCa')
+legend(Trace_1Label,Trace_2Label,Trace_3Label)
+%axis([-.1 1.5 0 800],'on')
+axis([-.1 2.0 0 1000],'on')
+set(gca,'YTick',0:200:800)
+
+
+%Normalized Force/Time
+subplot(3,1,2)
+hold on;
+[maximum max_idx] = max(Trace_1Y);
+NormMax=mean(Trace_1Y(max_idx-3:max_idx+5));
+% [maximum2 max_idx2] = max(Trace_2Y);
+% [maximum3 max_idx3] = max(Trace_3Y);
+plot(Trace_1X, Trace_1Y/NormMax,'k-'),hold on
+plot(Trace_2X, Trace_2Y/NormMax,'r-'),hold on
+plot(Trace_3X, Trace_3Y/NormMax,'g-'),hold on
+xlabel('Time(s)')
+ylabel('Normalized Force(pN)')
+%axis([-.1 1.5 0 1],'on')
+axis([-.1 2.0 0 1.2],'on')
+set(gca,'YTick',0:.2:1)
+
+%Calcium Profile/Time
+subplot(3,1,3)
+hold on;
+plot(Trace_1X,Ca_level{1},'k-'),hold on
+plot(Trace_2X,Ca_level{2},'r-'),hold on
+plot(Trace_3X,Ca_level{3},'g-'),hold on
+xlabel('Time(s)')
+ylabel('pCa')
+%axis([-.1 1.5 3 7],'on')
+axis([-.1 2.0 3 7],'on')
+set(gca, 'ydir', 'reverse')
+
+%% Ton/Events/XB Force dot diagrams
+clf(figure(3))
+subplot(2,2,1)
+hold on;
+errorbar(pCa_Range(1),nanmean(ton_ms{1}), nanstd(ton_ms{1}), 'ko', 'markerfacecolor', 'k'), hold on
+errorbar(pCa_Range(2),nanmean(ton_ms{2}), nanstd(ton_ms{2}), 'ro', 'markerfacecolor', 'r'), hold on
+errorbar(pCa_Range(3),nanmean(ton_ms{3}), nanstd(ton_ms{3}), 'go', 'markerfacecolor', 'g'), hold on
 set(gca, 'box', 'off')
+ylabel('t_{on} (ms)')
+axis([3 6 0 25],'on')
+set(gca, 'xdir', 'reverse')
+Title('t_{on} All')
 
-h2 = subplot(subplot(2,2,2));
-set(gca,'visible','off')
-text(0.2,0.4, sprintf('For SXB2 of 0.5 and SXB3 of 0.1\nFmax = %4.2f\nHill Coeff = %4.2f\npCa50 = %4.2f [%4.2f to %4.2f]\n\nFor SXB2 of 1 and SXB3 of 1\nFmax = %4.2f\nHill Coeff = %4.2f\npCa50 = %4.2f [%4.2f to %4.2f]\n',coeff1(1,1), coeff1(2,1), coeff1(3,1), coeff1(3,4),coeff1(3,5),coeff2(1,1), coeff2(2,1), coeff2(3,1), coeff2(3,4),coeff2(3,5)), 'parent', h2);
-
+subplot(2,2,2)
+hold on;
+errorbar(pCa_Range(1),nanmean(ton_Full{1}), nanstd(ton_Full{1}),'kd', 'markerfacecolor', 'k'), hold on
+errorbar(pCa_Range(2),nanmean(ton_Full{2}), nanstd(ton_Full{2}), 'rd', 'markerfacecolor', 'r'), hold on
+errorbar(pCa_Range(3),nanmean(ton_Full{3}), nanstd(ton_Full{3}), 'gd', 'markerfacecolor', 'g'), hold on
+set(gca, 'box', 'off')
+ylabel('t_{on} (ms)')
+axis([3 6 0 25],'on')
+set(gca, 'xdir', 'reverse')
+Title('t_{on} Full')
 
 subplot(2,2,3)
-plot([4:0.02:9], (coeff1(1,1)./(1+10.^(coeff1(2,1)*([4:0.02:9] - coeff1(3,1)))) / coeff2(1,1)), ...
-     [4:0.02:9], (coeff2(1,1)./(1+10.^(coeff2(2,1)*([4:0.02:9] - coeff2(3,1)))) / coeff2(1,1))), hold on
-%    [4:0.02:9], (coeff3(1,1)./(1+10.^(coeff3(2,1)*([4:0.02:9] - coeff3(3,1)))) / coeff1(1,1)), ...
-%    [4:0.02:9], (coeff4(1,1)./(1+10.^(coeff4(2,1)*([4:0.02:9] - coeff4(3,1)))) / coeff1(1,1))), hold on
-
- 
-legend('SXB2/3 = 0.5/0.1','SXB2/3 = 1/1',  'location', 'Northwest')%,'SXB2/3 = 0.1/0.5','SXB2/3 = 0.5/0.1',  'location', 'Northwest')
-errorbar(pCa_Range, (squeeze(Force(1,1,:)))/ Force(2,2,1), squeeze(Force_std(1,1,:))./Force(2,2,1), 'bo')
-errorbar(pCa_Range, (squeeze(Force(2,2,:))/ Force(2,2,1)), squeeze(Force_std(2,2,:))./Force(2,2,1), 'ko')
-% errorbar(pCa_Range, (squeeze(Force(1,3,:))/ Force(4,4,1)), squeeze(Force_std(1,3,:))./Force(4,4,1), 'ro')
-% errorbar(pCa_Range, (squeeze(Force(3,1,:))/ Force(4,4,1)), squeeze(Force_std(3,1,:))./Force(4,4,1), 'co')
-title('Relative Force/pCa')
-ylabel('Relative Force (pN)')
-xlabel('pCa')
-set(gca, 'xdir', 'reverse')
+errorbar(pCa_Range(1),nanmean(ton_Back{1}), nanstd(ton_Back{1}), 'kx', 'markerfacecolor', 'k'), hold on
+errorbar(pCa_Range(2),nanmean(ton_Back{2}), nanstd(ton_Back{2}), 'rx', 'markerfacecolor', 'r'), hold on
+errorbar(pCa_Range(3),nanmean(ton_Back{3}), nanstd(ton_Back{3}), 'gx', 'markerfacecolor', 'g'), hold on
 set(gca, 'box', 'off')
+ylabel('t_{on} (ms)')
+axis([3 6 0 25],'on')
+set(gca, 'xdir', 'reverse')
+Title('t_{on} Back')
+%%
 
+% subplot(2,2,2)
+% errorbar(1, mean(N_raw)/mean(N_raw), std(ton_raw)/mean(N_raw), 'ko', 'markerfacecolor', 'k'), hold on
+% errorbar(2, mean(Pct_full), std(Pct_full), 'ko', 'markerfacecolor', 'g'), hold on
+% errorbar(3, mean(Pct_back), std(Pct_back), 'ko', 'markerfacecolor', 'm');
+% set(gca, 'box', 'off')
+% ylabel('Num. Events (percent)')
+% xlim([0,4])
+% ylim([0,1.2])
+% set(gca, 'xtick', [1,2,3])
+% set(gca, 'xticklabel', {'All', 'Full', 'Back Exit'})
+% title(['N Total/trace ~' num2str(mean(N_raw)) '     ' date])
+
+%% XB Force for All,Full, and Back Exit Cycles for 3 different pCa values
+clf(figure(4))
+subplot(2,2,1)
+hold on;
+errorbar(pCa_Range(1),nanmean(XBF_Raw{1}), nanstd(XBF_Raw{1}), 'ko', 'markerfacecolor', 'k'), hold on
+errorbar(pCa_Range(2),nanmean(XBF_Raw{2}), nanstd(XBF_Raw{2}), 'ro', 'markerfacecolor', 'r');
+errorbar(pCa_Range(3),nanmean(XBF_Raw{3}), nanstd(XBF_Raw{3}), 'go', 'markerfacecolor', 'g');
+set(gca, 'box', 'off')
+ylabel('XB Force (pN) Raw')
+xlim([3,7])
+ylim([-10,5])
+title('Force from All Cycle XBs')
+set(gca, 'xdir', 'reverse')
+set(gca, 'xtick', pCa_Range)
+
+subplot(2,2,2)
+hold on;
+errorbar(pCa_Range(1),nanmean(XBF_Full{1}), nanstd(XBF_Full{1}), 'kd', 'markerfacecolor', 'k'), hold on
+errorbar(pCa_Range(2),nanmean(XBF_Full{2}), nanstd(XBF_Full{2}), 'rd', 'markerfacecolor', 'r');
+errorbar(pCa_Range(3),nanmean(XBF_Full{3}), nanstd(XBF_Full{3}), 'gd', 'markerfacecolor', 'g');
+set(gca, 'box', 'off')
+ylabel('XB Force (pN) Full')
+xlim([3,7])
+ylim([-10,5])
+title('Force from Full Cycle XBs')
+set(gca, 'xdir', 'reverse')
+set(gca, 'xtick', pCa_Range)
+
+subplot(2,2,3)
+hold on;
+errorbar(pCa_Range(1),nanmean(XBF_Back{1}), nanstd(XBF_Back{1}), 'kx', 'markerfacecolor', 'k'), hold on
+errorbar(pCa_Range(2),nanmean(XBF_Back{2}), nanstd(XBF_Back{2}), 'rx', 'markerfacecolor', 'r');
+errorbar(pCa_Range(3),nanmean(XBF_Back{3}), nanstd(XBF_Back{3}), 'gx', 'markerfacecolor', 'g');
+set(gca, 'box', 'off')
+ylabel('XB Force (pN) Back Exit')
+title('Force from Back Exit Cycle XBs')
+xlim([3,7])
+ylim([-10,5])
+set(gca, 'xdir', 'reverse')
+set(gca, 'xtick', pCa_Range)
+
+%% XBF ENERGY for All,Full, and Back Exit Cycles for 3 different pCa values
+clf(figure(5))
+subplot(2,2,1)
+hold on;
+errorbar(pCa_Range(1),nanmean(XBF_EnRaw{1}), nanstd(XBF_EnRaw{1}), 'ko', 'markerfacecolor', 'k'), hold on
+errorbar(pCa_Range(2),nanmean(XBF_EnRaw{2}), nanstd(XBF_EnRaw{2}), 'ro', 'markerfacecolor', 'r');
+errorbar(pCa_Range(3),nanmean(XBF_EnRaw{3}), nanstd(XBF_EnRaw{3}), 'go', 'markerfacecolor', 'g');
+set(gca, 'box', 'off')
+ylabel('XB Energy (pN nm) Raw')
+xlim([3,7])
+ylim([0,100])
+title('Energy from All Cycle XBs')
+set(gca, 'xdir', 'reverse')
+set(gca, 'xtick', pCa_Range)
+
+subplot(2,2,2)
+hold on;
+errorbar(pCa_Range(1),nanmean(XBF_EnFull{1}), nanstd(XBF_EnFull{1}), 'kd', 'markerfacecolor', 'k'), hold on
+errorbar(pCa_Range(2),nanmean(XBF_EnFull{2}), nanstd(XBF_EnFull{2}), 'rd', 'markerfacecolor', 'r');
+errorbar(pCa_Range(3),nanmean(XBF_EnFull{3}), nanstd(XBF_EnFull{3}), 'gd', 'markerfacecolor', 'g');
+set(gca, 'box', 'off')
+ylabel('XB Energy (pN nm) Full')
+xlim([3,7])
+ylim([0,100])
+Title('Energy from Full Cycle XBs')
+set(gca, 'xdir', 'reverse')
+set(gca, 'xtick', pCa_Range)
+
+subplot(2,2,3)
+hold on;
+errorbar(pCa_Range(1),nanmean(XBF_EnBack{1}), nanstd(XBF_EnBack{1}), 'kx', 'markerfacecolor', 'k'), hold on
+errorbar(pCa_Range(2),nanmean(XBF_EnBack{2}), nanstd(XBF_EnBack{2}), 'rx', 'markerfacecolor', 'r');
+errorbar(pCa_Range(3),nanmean(XBF_EnBack{3}), nanstd(XBF_EnBack{3}), 'gx', 'markerfacecolor', 'g');
+set(gca, 'box', 'off')
+ylabel('XB Energy (pN nm) Back Exit')
+xlim([3,7])
+ylim([0,10])
+Title('Energy from Back Exit XBs')
+set(gca, 'xdir', 'reverse')
+set(gca, 'xtick', pCa_Range)
+%%
 subplot(2,2,4)
-plot([4:0.02:9], (coeff1(1,1)./(1+10.^(coeff1(2,1)*([4:0.02:9] - coeff1(3,1)))) / coeff1(1,1)), ...
-     [4:0.02:9], (coeff2(1,1)./(1+10.^(coeff2(2,1)*([4:0.02:9] - coeff2(3,1)))) / coeff2(1,1))), hold on
-%      [4:0.02:9], (coeff3(1,1)./(1+10.^(coeff3(2,1)*([4:0.02:9] - coeff3(3,1)))) / coeff3(1,1)), ...
-%      [4:0.02:9], (coeff4(1,1)./(1+10.^(coeff4(2,1)*([4:0.02:9] - coeff4(3,1)))) / coeff4(1,1))), hold on
-
-legend('SXB2/3 = 0.5/0.1','SXB2/3 = 1/1',  'location', 'Northwest')%,'SXB2/3 = 0.1/0.5','SXB2/3 = 0.5/0.1',  'location', 'Northwest')
-errorbar(pCa_Range, (squeeze(Force(1,1,:)))/ Force(1,1,1), squeeze(Force_std(1,1,:))./Force(1,1,1), 'bo')
-errorbar(pCa_Range, (squeeze(Force(2,2,:))/ Force(2,2,1)), squeeze(Force_std(2,2,:))./Force(2,2,1), 'ko')
-% errorbar(pCa_Range, squeeze(Force(1,3,:)), squeeze(Force_std(1,3,:)), 'ko')
-% errorbar(pCa_Range, squeeze(Force(3,1,:)), squeeze(Force_std(3,1,:)), 'ko')
-title('Normalized Force/pCa')
-ylabel('Normalized Force (pN)')
-xlabel('pCa')
-set(gca, 'xdir', 'reverse')
+errorbar(pCa_Range(1),nanmean(XBF_Enraw{1}), nanstd(XBF_raw{1}), 'ko', 'markerfacecolor', 'k'), hold on
+errorbar(pCa_Range(2),nanmean(XBF_Enraw{2}), nanstd(XBF_raw{2}), 'ro', 'markerfacecolor', 'r');
+errorbar(pCa_Range(3),nanmean(XBF_raw{3}), nanstd(XBF_raw{3}), 'go', 'markerfacecolor', 'g');
 set(gca, 'box', 'off')
+ylabel('XB Force (pN)')
+xlim([3,7])
+ylim([-10,5])
+set(gca, 'xdir', 'reverse')
+set(gca, 'xtick', pCa_Range)
+errorbar(1, mean(XBNRG_raw), std(XBNRG_raw), 'ko', 'markerfacecolor', 'k');, hold on
+errorbar(2, mean(XBNRG_full), std(XBNRG_full), 'ko', 'markerfacecolor', 'g');
+errorbar(3, mean(XBNRG_back), std(XBNRG_back), 'ko', 'markerfacecolor', 'm');
+set(gca, 'box', 'off')
+ylabel('XB Energy (pN nm)')
+xlim([0,4])
+ylim([0,100])
+set(gca, 'xtick', [1,2,3])
+set(gca, 'xticklabel', {'All', 'Full', 'Back Exit'})
+
 
