@@ -1,4 +1,4 @@
-function [OutTotal]=GatherData_v1(OutTotal, DataDir, pCa)
+function [OutTotal]=GatherData_v1(OutTotal, DataDir_Array, pCa)
 
 %% Gather the data that was written to text files, into the OutTotal cell
 %% array, then pass the cell array back to the function.
@@ -18,6 +18,7 @@ function [OutTotal]=GatherData_v1(OutTotal, DataDir, pCa)
 for i=1:length(pCa)
     OutTotal{i, 1}=pCa(i,1);
     Topdir=pwd;
+    DataDir=DatDir_Array(i: )
     cd(DataDir)
     %% First bring in the time series data; strip the file name exactly as
     %% used to write the text file, at the end of Run_v1.m

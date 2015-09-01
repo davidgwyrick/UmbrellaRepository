@@ -31,8 +31,8 @@ f=@(x,xdata)(x(1)./(1+10.^(x(2)*(xdata - x(3)))));
 
 % Fit the data using LSQCURVEFIT
 maxGuess=max(ydata);
-slopeGuess=1+2.2*rand;
-midGuess=5.5+2*rand;
+slopeGuess=1+2.2*rand; %May have to change if hill fit is not working
+midGuess=5.5+1*rand;
 
 
 % disp('Now analyze the data fits using NLINFIT:')

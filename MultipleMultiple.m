@@ -5,7 +5,7 @@
 %%
 clc 
 % Enables parallel language features like parfor
-if matlabpool('size') == 0, matlabpool, end
+if matlabpool('size') == 0, matlabpool(3), end
 
 TnDensitiesUniform = [];
 TnDensitiesRandom = 1;
@@ -27,8 +27,9 @@ init_params;
 % GausPeak_range = [2000];%, 2400, 1600];
 
 %% Timer/Time Calculation
-NumRuns = 4;
-pCaV = [4.0];
+NumRuns = 3;
+%pCaV = [4.0, 4.5, 5.0, 5.5, 5.7, 5.8, 5.9, 6.0, 6.1, 6.25, 6.5, 7.0, 8.0];
+pCaV = [4 5 5.5 5.75 6 6.5 7 8];
 HalfSL_Range = [1210];
 Pulse_Width_Range = [80]; %number of ms of Ca2+ pulse
 NumTwitch = 2; %number of twitches Max: 3 twitches
@@ -37,17 +38,18 @@ TimeBtwTwitches = [505]; %number of ms btw peak of pulses; i.e. if the pulse wid
 % would begin as the first Ca Transient is going down
 % Rate_Range = [-0.1 -0.25 -0.5 -1.0];
 Rate_Range = [0];
+%OutDir_Array={''};
 Muscle_Type_Range = {'Soleus'};
 
 % calc_sim_time(NumRuns, pCaV, HalfSL_Range, Rate_Range, Muscle_Type_Range, SXB2_Range, SXB3_Range, Pulse_Width_Range, eta_range,f1_range,y0_range);
 calc_sim_time(NumRuns, pCaV, HalfSL_Range, Pulse_Width_Range, Rate_Range, Muscle_Type_Range);
 tStart = tic;
 %% Type of Ca profile for twitch analysis
-%Ca_protocol = 'None';
+Ca_protocol = 'None';
 % Ca_protocol = 'Step';
 %Ca_protocol = 'Burst';
 % Ca_protocol = 'Train';
-Ca_protocol = 'Twitch';
+%Ca_protocol = 'Twitch';
 %Ca_protocol = 'MultipleTwitch';
 %% 
 
@@ -91,19 +93,16 @@ for ipulse_width = 1:length(Pulse_Width_Range) %Loopthrough/do simulations on di
                                 filaments.XBFraction = XBKO;
                                 for kxscaler = kxscaler
                                     StiffScale.kxscaler = kxscaler;
-                                    Timestr=Strcat(datestr(clock,'yyyy_mm_dd_HHMM'));
-                                    if strcmp(Ca_protocol,'None') == 1
-                                        OutDir = ['DataFiles' filesep 'Kinetic_Rates' filesep Timestr,'Rate=', num2str(Rate), filesep];
-                                       % OutDir = ['DataFiles' filesep 'David_Test' filesep];
-                                    else
-                                        OutDir = ['DataFiles' filesep Timestr,'Rate=', num2str(Rate), '_SXB2=', num2str(tcparam.SXB2,'%1.2f'),'_SXB3=', num2str(tcparam.SXB3,'%1.2f'), ' ', num2str(pulse_width), 'ms', Ca_protocol filesep];
-                                       % OutDir = ['DataFiles' filesep 'David_Test' filesep];
-                                    end
-                                   
-                                    mkdir(OutDir);
-                                    save([OutDir filesep 'Parameters.mat']);
-                                    for pCa_in = pCaV
+                                    for pCa_index = 1:length(pCaV)
+                                        pCa_in=pCaV(pCa_index);
                                         % pCa is a parameter by itself, i.e. no struct
+                                        Timestr=Strcat(datestr(clock,'yyyy_mm_dd_HHMM'));
+                                        if Ca_protocol == 'None' OutDir = ['DataFiles' filesep 'SteadyStateCaOff=20_koff=50' filesep]; else OutDir = ['DataFiles' filesep num2str(pulse_width), 'ms', Ca_protocol filesep];end
+                                        %Fix String Array later
+                                        %if pCa_index ==1, OutDir_Array=OutDir; else OutDir_Array=Strcat(OutDir_Array,OutDir);end
+                                        mkdir(OutDir);
+                                        save([OutDir filesep 'Parameters.mat']);
+                                        
                                         disp( [ 'pCa = ' num2str( pCa_in )])
                                         [Steps, Stats, IndexThalf, Binder] = RunSeveral(NumRuns, DataParams, Muscle_Type, StartLength, pCa_in, StiffScale, filaments, knockout, coop, TFRateScale, tcparam, Rate, Ca_protocol, pulse_width,NumTwitch,TimeBtwTwitches);
                                         WriteText(OutDir, pCa_in, DataParams.dt, Binder, Steps, Stats, IndexThalf);
@@ -134,11 +133,11 @@ end
 % Output time/force and time/FA graphs  -Axel
 % clf(figure(1))
 %plotTSwyrick(pCaV,OutDir,Ca_protocol,Pulse_Width_Range)
-Data{1,4}=[];%{pCaV,Steps,Binder,IndexThalf};
-Data=GatherData_v1(Data,OutDir,pCaV)
-
+% Data{1,4}=[];%{pCaV,Steps,Binder,IndexThalf};
+% Data=GatherData_v1(Data,OutDir_Array,pCaV)
+% Process_HillCurves_v1(pCaV,OutDir,Data,3,Ca_protocol,knockout.TnFraction,knockout.XB_Fraction)
 
 tEnd = toc(tStart);
-Process_HillCurves_v1(pCaV,OutDir,Data,3,Ca_protocol,knockout.TnFraction,knockout.XB_Fraction)
+
 
 fprintf('\nTotal Time: %d minutes and %3.2f seconds\n',floor(tEnd/60),rem(tEnd,60))
