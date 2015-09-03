@@ -1,4 +1,4 @@
-function [Steps, Stats, IndexThalf, Binder] = RunSeveral(RequestedRuns, DataParams, Muscle_Type, StartLength, pCa, StiffScale, filaments, knockout, coop, TFRateScale, tcparam, Rate, Ca_protocol, pulse_width, NumTwitch, TimeBtwTwitches)
+function [Steps, Stats, IndexThalf, Binder] = RunSeveral(RequestedRuns, DataParams, Muscle_Type, StartLength, pCa, StiffScale, filaments, knockout, coop, TFRateScale, tcparam, Rate, Ca_protocol, pulse_width, NumTwitch, TimeBtwTwitches,Koff,RuOff,CaOff)
 
 %% Calcium Level in Molar
 Ca = 10^(-pCa); 
@@ -124,7 +124,7 @@ EndVeccore = MakeEndVeccore(NACT, NumSites, NMYO, NumBridges, KACT, LACT, KMYO, 
 HARDY = MakeHARDY(); % more moved out for space than anything.
 LAUREL = MakeLAUREL(filaments.Angle_Crowns, NumBridges, filaments.Angle_Thick_Start, MYONodes, N_Thick_Start, NMYO);
 
-[TFRatePass(1,1), TFRatePass(2,1), TFRatePass(3,1), TFRatePass(4,1), TFRatePass(5,1), TFRatePass(6,1)] = ScaleThinFilRates(TFRateScale.ScaleK1, TFRateScale.ScaleK2, TFRateScale.ScaleK3 );
+[TFRatePass(1,1), TFRatePass(2,1), TFRatePass(3,1), TFRatePass(4,1), TFRatePass(5,1), TFRatePass(6,1)] = ScaleThinFilRates(TFRateScale.ScaleK1, TFRateScale.ScaleK2, TFRateScale.ScaleK3,Koff,RuOff,CaOff);
 
 %% XB binding stuff
 Big_Binder = {};

@@ -1,7 +1,9 @@
 %pCa_Range = [4.0, 4.5, 5.0, 5.5, 5.7, 5.8, 5.9, 6.0, 6.1, 6.25, 6.5, 7.0, 8.0];
 %pCa_Range= [4 5 5.5 5.75 6 6.5 7 8];
-pCa_Range= [4 5 5.5]
-Pulse_Width = 90;
+pCa_Range= [4 4.5 5.0]
+%pCa_Range= [4 5 5.5]
+% Pulse_Width = 400;
+Pulse_Width = 10;
 %RateRange = [0]; %-
 
 
@@ -33,9 +35,9 @@ TS_Force = {{},{},{}}; % TimeSeries Force @ (SXB2 index, SXB3 index, pCa index)
 Ca_level = {{},{},{}};
 
 %addpath('J:\TannerBertGroup\GraduateStudents\Axel_Fenwick\Sims\Vert_3Alex')
-%foldername = ['Vary_pCa_90msTwitch\'];
-%foldername = ['80msTwitch\'];
-foldername = ['400msTwitch\'];
+% foldername = ['Vary_pCa_10msTwitch\'];
+foldername = ['80msTwitch\'];
+%foldername = ['400msTwitch\'];
 
 
 %foldername = ['SSdataTest\'];
@@ -89,12 +91,70 @@ plot(Trace_2X,Trace_2Y,'r-'),hold on
 plot(Trace_3X,Trace_3Y,'g-'),hold on
 xlabel('Time(s)')
 ylabel('Force (pN)')
-title('400ms Twitch at different pCa')
+title('10ms Twitch at different pCa')
 legend(Trace_1Label,Trace_2Label,Trace_3Label)
 %axis([-.1 1.5 0 800],'on')
 axis([-.1 2.0 0 1000],'on')
 set(gca,'YTick',0:200:800)
+%% Finding Time to 50% and 90% Relaxation
 
+RT90_found=0;
+RT50_found=0;
+RT90_ind=0;
+RT50_ind=0;
+for ii=1:length(Trace_1Y),
+    [mm mm_index] =max(Trace_1Y);
+    if ii > mm_index && (Trace_1Y(ii)/mm)< .50 && RT50_found == 0; 
+        RT50_ind=ii;
+        RT50_found=1;
+    end
+    if ii > mm_index && (Trace_1Y(ii)/mm)< .10 && RT90_found == 0; 
+        RT90_ind=ii;
+        RT90_found=1;
+    end
+    
+end
+disp(['Time to 50% Relaxation: ' num2str(Trace_1X(RT50_ind)) 's for a pCa of ' num2str(pCa_Range(1)) ' at ' num2str(Pulse_Width) 'ms Twitch'])
+disp(['Time to 90% Relaxation: ' num2str(Trace_1X(RT90_ind)) 's for a pCa of ' num2str(pCa_Range(1)) ' at ' num2str(Pulse_Width) 'ms Twitch'])
+disp(' ')
+RT90_found=0;
+RT50_found=0;
+RT90_ind2=0;
+RT50_ind2=0;
+for ii=1:length(Trace_2Y),
+    [mm2 mm_index2] =max(Trace_2Y);
+    if ii > mm_index2 && (Trace_2Y(ii)/mm2)< .50 && RT50_found == 0; 
+        RT50_ind2=ii;
+        RT50_found=1;
+    end
+    if ii > mm_index2 && (Trace_2Y(ii)/mm2)< .10 && RT90_found == 0; 
+        RT90_ind2=ii;
+        RT90_found=1;
+    end
+    
+end
+disp(['Time to 50% Relaxation: ' num2str(Trace_2X(RT50_ind2)) 's for a pCa of ' num2str(pCa_Range(2)) ' at ' num2str(Pulse_Width) 'ms Twitch'])
+disp(['Time to 90% Relaxation: ' num2str(Trace_2X(RT90_ind2)) 's for a pCa of ' num2str(pCa_Range(2)) ' at ' num2str(Pulse_Width) 'ms Twitch'])
+disp(' ')
+RT90_found=0;
+RT50_found=0;
+RT90_ind3=0;
+RT50_ind3=0;
+for ii=1:length(Trace_3Y),
+    [mm3 mm_index3] =max(Trace_3Y);
+    if ii > mm_index3 && (Trace_3Y(ii)/mm3)< .50 && RT50_found == 0; 
+        RT50_ind3=ii;
+        RT50_found=1;
+    end
+    if ii > mm_index3 && (Trace_3Y(ii)/mm3)< .10 && RT90_found == 0; 
+        RT90_ind3=ii;
+        RT90_found=1;
+    end
+    
+end
+disp(['Time to 50% Relaxation: ' num2str(Trace_3X(RT50_ind3)) 's for a pCa of ' num2str(pCa_Range(3)) ' at ' num2str(Pulse_Width) 'ms Twitch'])
+disp(['Time to 90% Relaxation: ' num2str(Trace_3X(RT90_ind3)) 's for a pCa of ' num2str(pCa_Range(3)) ' at ' num2str(Pulse_Width) 'ms Twitch'])
+%%
 
 %Normalized Force/Time
 subplot(3,1,2)
@@ -111,6 +171,7 @@ ylabel('Normalized Force(pN)')
 %axis([-.1 1.5 0 1],'on')
 axis([-.1 2.0 0 1.2],'on')
 set(gca,'YTick',0:.2:1)
+set(gca,'XTick',0:.1:2)
 
 %Calcium Profile/Time
 subplot(3,1,3)

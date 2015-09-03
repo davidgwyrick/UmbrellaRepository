@@ -25,13 +25,18 @@ init_params;
 % SlopeR_range = [20];%, 24, 16];
 % atan_max_range = [50];%, 80, 120];
 % GausPeak_range = [2000];%, 2400, 1600];
+%% Testing TF Rates (9/3/15)
+
+Koff_range = [5 25 100];
+RuOff_range = [5 25 100];
+CaOff_range = [5 25 100];
 
 %% Timer/Time Calculation
 NumRuns = 4;
-pCaV = [4.0, 4.5, 5.0, 5.5, 5.7, 5.8 6];
-%pCaV = [4];
+%pCaV = [4.0, 4.5, 5.0, 5.5, 5.7, 5.8 6];
+pCaV = [4];
 HalfSL_Range = [1210];
-Pulse_Width_Range = [25]; %number of ms of Ca2+ pulse
+Pulse_Width_Range = [90]; %number of ms of Ca2+ pulse
 NumTwitch = 2; %number of twitches Max: 3 twitches
 TimeBtwTwitches = [505]; %number of ms btw peak of pulses; i.e. if the pulse width range were 50ms and you
 % inputed a timeBtwTwitches to be 35ms, then the start of the second twitch
@@ -67,7 +72,13 @@ Ca_protocol = 'Twitch';
 %     tcparam.atan_max = atan_max_range(iatan_max_range);
 % for iGausPeak_range = 1:length(GausPeak_range);
 %     tcparam.GausPeak = GausPeak_range(iGausPeak_range);
-%%
+
+for ikoff=1:length(Koff_range)
+    Koff=Koff_range(ikoff);
+for iRuoff=1:length(RuOff_range)
+    RuOff=RuOff_range(iRuoff);
+for iCaoff=1:length(CaOff_range)
+    CaOff=CaOff_range(iCaoff);
 for ipulse_width = 1:length(Pulse_Width_Range) %Loopthrough/do simulations on different Pulse widths of Ca transients
     pulse_width = Pulse_Width_Range(ipulse_width);
     %     for iSXB2 = 1:length(SXB2_Range)
@@ -100,12 +111,12 @@ for ipulse_width = 1:length(Pulse_Width_Range) %Loopthrough/do simulations on di
                                         %if strcmp(Ca_protocol,'None') == 1, OutDir = ['DataFiles' filesep 'SteadyStateCaOff=20_koff=50' filesep]; else OutDir = ['DataFiles' filesep num2str(pulse_width), 'ms', Ca_protocol filesep];end
                                         %Fix String Array later
                                         %if pCa_index ==1, OutDir_Array=OutDir; else OutDir_Array=Strcat(OutDir_Array,OutDir);end
-                                        OutDir = ['DataFiles' filesep 'Vary_pCa_',num2str(pulse_width), 'ms', Ca_protocol filesep];
+                                        OutDir = ['DataFiles' filesep 'TFrates_koff=',num2str(Koff), ' RuOff=',num2str(RuOff),' CaOff=',num2str(CaOff) filesep];
                                         mkdir(OutDir);
                                         save([OutDir filesep 'Parameters.mat']);
                                         
                                         disp( [ 'pCa = ' num2str( pCa_in )])
-                                        [Steps, Stats, IndexThalf, Binder] = RunSeveral(NumRuns, DataParams, Muscle_Type, StartLength, pCa_in, StiffScale, filaments, knockout, coop, TFRateScale, tcparam, Rate, Ca_protocol, pulse_width,NumTwitch,TimeBtwTwitches);
+                                        [Steps, Stats, IndexThalf, Binder] = RunSeveral(NumRuns, DataParams, Muscle_Type, StartLength, pCa_in, StiffScale, filaments, knockout, coop, TFRateScale, tcparam, Rate, Ca_protocol, pulse_width,NumTwitch,TimeBtwTwitches,Koff,RuOff,CaOff);
                                         WriteText(OutDir, pCa_in, DataParams.dt, Binder, Steps, Stats, IndexThalf);
                                         WriteTon(DataParams.dt, OutDir, pCa_in, OutDir, knockout.XB_Fraction, Stats);
 %                                         clf(figure(1))
@@ -122,7 +133,9 @@ for ipulse_width = 1:length(Pulse_Width_Range) %Loopthrough/do simulations on di
     %         end
     %     end
 end
-
+end
+end
+end
 % end
 % end
 % end
