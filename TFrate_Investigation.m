@@ -45,33 +45,362 @@ end
 
 %% Find Max values and Time to 50%/90% Relaxation
 
-TF_Relax=zeros(27,2);
-MaxForce=zeros(27,2);
-for ii=1:27
-    Force=TS_Force{ii};
-    Time=TS_Time{ii};
-    RT90_found=0;
-    RT50_found=0;
-    RT90_ind=0;
-    RT50_ind=0;
-    for jj=1:length(Force),
-        [mm mm_index] =max(Force);
-        mnew=mean(Force(mm_index-3:mm_index+3));
-        MaxForce(ii,2)=mnew;
-        MaxForce(ii,1)=mm;
-        if jj > mm_index && (Force(jj)/mnew)< .50 && RT50_found == 0; 
-            RT50_ind=jj;
-            RT50_found=1;
-            TF_Relax(ii,1)= Time(RT50_ind);
-        end
-        if jj > mm_index && (Force(jj)/mnew)< .10 && RT90_found == 0; 
-            RT90_ind=jj;
-            RT90_found=1;
-            TF_Relax(ii,2)= Time(RT90_ind);
-        end
-               
-    end
-end
+% TF_Relax=zeros(27,2);
+% MaxForce=zeros(27,2);
+% for ii=1:27
+%     Force=TS_Force{ii};
+%     Time=TS_Time{ii};
+%     RT90_found=0;
+%     RT50_found=0;
+%     RT90_ind=0;
+%     RT50_ind=0;
+%     for jj=1:length(Force),
+%         [mm mm_index] =max(Force);
+%         mnew=mean(Force(mm_index-3:mm_index+3));
+%         MaxForce(ii,2)=mnew;
+%         MaxForce(ii,1)=mm;
+%         if jj > mm_index && (Force(jj)/mnew)< .50 && RT50_found == 0; 
+%             RT50_ind=jj;
+%             RT50_found=1;
+%             TF_Relax(ii,1)= Time(RT50_ind);
+%         end
+%         if jj > mm_index && (Force(jj)/mnew)< .10 && RT90_found == 0; 
+%             RT90_ind=jj;
+%             RT90_found=1;
+%             TF_Relax(ii,2)= Time(RT90_ind);
+%         end
+%                
+%     end
+% end
+
+%% Normalized Ca Transient
+Ca_Level=TS_CaLevel{21};
+for ii=1:length(Ca_Level), Ca_Level(ii)=10^(-Ca_Level(ii));end
+Time=TS_Time{21};
+[CaMax Max_index]=max(Ca_Level);
+plot(Time,Ca_Level/CaMax,'--k'),hold on
+axis([-.1 1 0 1]);
+
+%% Actins Ca2 CaOff=100
+clf(figure(32))
+subplot(3,1,1);
+hold on;
+plot(TS_Time{3},TS_TF3{3},'-m','LineWidth',.5,'MarkerSize',2),hold on
+label1=['koff=5 RuOff=5 CaOff=100'];
+plot(TS_Time{6},TS_TF3{6},'-g','LineWidth',.5,'MarkerSize',2),hold on
+label2=['koff=5 RuOff=25 CaOff=100'];
+plot(TS_Time{9},TS_TF3{9},':r','LineWidth',.5,'MarkerSize',2),hold on
+label3=['koff=5 RuOff=100 CaOff=100'];
+plot(Time,Ca_Level/CaMax,'--k'),hold on
+labelCa=['Normalized Ca Transient'];
+Legend(label1,label2,label3,labelCa)
+xlabel('Time(s)')
+ylabel('Actins Ca2')
+xlim([0 1])
+title('Constant CaOff=100 and kOff=5')
+
+
+subplot(3,1,2);
+hold on;
+plot(TS_Time{12},TS_TF3{12},'-g','LineWidth',.5,'MarkerSize',2),hold on
+label4=['koff=25 RuOff=5 CaOff=100'];
+plot(TS_Time{15},TS_TF3{15},'-b','LineWidth',.5,'MarkerSize',2),hold on
+label5=['koff=25 RuOff=25 CaOff=100'];
+plot(TS_Time{18},TS_TF3{18},'-k','LineWidth',.5,'MarkerSize',2),hold on
+label6=['koff=25 RuOff=100 CaOff=100'];
+plot(Time,Ca_Level/CaMax,'--k'),hold on
+labelCa=['Normalized Ca Transient'];
+legend(label4,label5,label6,labelCa)
+xlabel('Time(s)')
+ylabel('Actins Ca2')
+xlim([0 1])
+title('Constant koff=25 and CaOff=100')
+
+subplot(3,1,3);
+hold on;
+plot(TS_Time{21},TS_TF3{21},':k','LineWidth',.5,'MarkerSize',2),hold on
+label7=['koff=100 RuOff=5 CaOff=100'];
+plot(TS_Time{24},TS_TF3{24},'-r','LineWidth',.5,'MarkerSize',2),hold on
+label8=['koff=100 RuOff=25 CaOff=100'];
+plot(TS_Time{27},TS_TF3{27},'-b','LineWidth',.5,'MarkerSize',2),hold on
+label9=['koff=100 RuOff=100 CaOff=100'];
+plot(Time,Ca_Level/CaMax,'--k'),hold on
+labelCa=['Normalized Ca Transient'];
+legend(label7,label8,label9,labelCa)
+xlabel('Time(s)')
+ylabel('Actins Ca2')
+xlim([0 1])
+title('Constant koff=100 and CaOff=100')
+
+%% Plotting Actin Fractions
+clf(figure(30))
+subplot(3,1,1);
+hold on;
+plot(TS_Time{1},TS_TF3{1},'-m','LineWidth',.5,'MarkerSize',2),hold on
+label1=['koff=5 RuOff=5 CaOff=5'];
+plot(TS_Time{2},TS_TF3{2},'-g','LineWidth',.5,'MarkerSize',2),hold on
+label2=['koff=5 RuOff=5 CaOff=25'];
+plot(TS_Time{3},TS_TF3{3},':r','LineWidth',.5,'MarkerSize',2),hold on
+label3=['koff=5 RuOff=5 CaOff=100'];
+Legend(label1,label2,label3)
+xlabel('Time(s)')
+ylabel('Actins Ca2')
+xlim([0 1])
+title('Constant koff=5 and RuOff=5')
+
+
+subplot(3,1,2);
+hold on;
+plot(TS_Time{4},TS_TF3{4},'-g','LineWidth',.5,'MarkerSize',2),hold on
+label4=['koff=5 RuOff=25 CaOff 5'];
+plot(TS_Time{5},TS_TF3{5},'-b','LineWidth',.5,'MarkerSize',2),hold on
+label5=['koff=5 RuOff=25 CaOff=25'];
+plot(TS_Time{6},TS_TF3{6},'-k','LineWidth',.5,'MarkerSize',2),hold on
+label6=['koff=5 RuOff=25 CaOff=100'];
+legend(label4,label5,label6)
+xlabel('Time(s)')
+ylabel('Actins Ca2')
+xlim([0 1])
+title('Constant koff=5 and RuOff=25')
+
+subplot(3,1,3);
+hold on;
+plot(TS_Time{7},TS_TF3{7},'-k','LineWidth',.5,'MarkerSize',2),hold on
+label7=['koff=5 RuOff=100 CaOff=5'];
+plot(TS_Time{8},TS_TF3{8},'-r','LineWidth',.5,'MarkerSize',2),hold on
+label8=['koff=5 RuOff=100 CaOff=25'];
+plot(TS_Time{9},TS_TF3{9},'-b','LineWidth',.5,'MarkerSize',2),hold on
+label9=['koff=5 RuOff=100 CaOff=100'];
+legend(label7,label8,label9)
+xlabel('Time(s)')
+ylabel('Actins Ca2')
+xlim([0 1])
+title('Constant koff=5 and RuOff=100')
+
+%% Actins Ca2 koff=25
+clf(figure(31))
+subplot(3,1,1);
+hold on;
+plot(TS_Time{10},TS_TF3{10},'-m','LineWidth',.5,'MarkerSize',2),hold on
+label1=['koff=25 RuOff=5 CaOff=5'];
+plot(TS_Time{11},TS_TF3{11},'-g','LineWidth',.5,'MarkerSize',2),hold on
+label2=['koff=25 RuOff=5 CaOff=25'];
+plot(TS_Time{12},TS_TF3{12},'-r','LineWidth',.5,'MarkerSize',2),hold on
+label3=['koff=25 RuOff=5 CaOff=100'];
+Legend(label1,label2,label3)
+xlabel('Time(s)')
+ylabel('Actins Ca2')
+xlim([0 1])
+title('Constant koff=25 and RuOff=5')
+
+
+subplot(3,1,2);
+hold on;
+plot(TS_Time{13},TS_TF3{13},'-g','LineWidth',.5,'MarkerSize',2),hold on
+label4=['koff=25 RuOff=25 CaOff 5'];
+plot(TS_Time{14},TS_TF3{14},'-b','LineWidth',.5,'MarkerSize',2),hold on
+label5=['koff=25 RuOff=25 CaOff=25'];
+plot(TS_Time{15},TS_TF3{15},'-k','LineWidth',.5,'MarkerSize',2),hold on
+label6=['koff=25 RuOff=25 CaOff=100'];
+legend(label4,label5,label6)
+xlabel('Time(s)')
+ylabel('Actins Ca2')
+xlim([0 1])
+title('Constant koff=25 and RuOff=25')
+
+subplot(3,1,3);
+hold on;
+plot(TS_Time{16},TS_TF3{16},'-k','LineWidth',.5,'MarkerSize',2),hold on
+label7=['koff=25 RuOff=100 CaOff=5'];
+plot(TS_Time{17},TS_TF3{17},'-r','LineWidth',.5,'MarkerSize',2),hold on
+label8=['koff=25 RuOff=100 CaOff=25'];
+plot(TS_Time{18},TS_TF3{18},'-b','LineWidth',.5,'MarkerSize',2),hold on
+label9=['koff=25 RuOff=100 CaOff=100'];
+legend(label7,label8,label9)
+xlabel('Time(s)')
+ylabel('Actins Ca2')
+xlim([0 1])
+title('Constant koff=25 and RuOff=100')
+
+%% Actins Ca2 koff=100
+clf(figure(32))
+subplot(3,1,1);
+hold on;
+plot(TS_Time{19},TS_TF3{19},'-m','LineWidth',.5,'MarkerSize',2),hold on
+label1=['koff=100 RuOff=5 CaOff=5'];
+plot(TS_Time{20},TS_TF3{20},'-g','LineWidth',.5,'MarkerSize',2),hold on
+label2=['koff=100 RuOff=5 CaOff=25'];
+plot(TS_Time{21},TS_TF3{21},':r','LineWidth',.5,'MarkerSize',2),hold on
+label3=['koff=100 RuOff=5 CaOff=100'];
+plot(Time,Ca_Level/CaMax,'--k'),hold on
+labelCa=['Normalized Ca Transient'];
+Legend(label1,label2,label3,labelCa)
+xlabel('Time(s)')
+ylabel('Actins Ca2')
+xlim([0 1])
+title('Constant koff=100 and RuOff=5')
+
+
+subplot(3,1,2);
+hold on;
+plot(TS_Time{22},TS_TF3{22},'-g','LineWidth',.5,'MarkerSize',2),hold on
+label4=['koff=100 RuOff=25 CaOff 5'];
+plot(TS_Time{23},TS_TF3{23},'-b','LineWidth',.5,'MarkerSize',2),hold on
+label5=['koff=100 RuOff=25 CaOff=25'];
+plot(TS_Time{24},TS_TF3{24},'-k','LineWidth',.5,'MarkerSize',2),hold on
+label6=['koff=100 RuOff=25 CaOff=100'];
+plot(Time,Ca_Level/CaMax,'--k'),hold on
+labelCa=['Normalized Ca Transient'];
+legend(label4,label5,label6,labelCa)
+xlabel('Time(s)')
+ylabel('Actins Ca2')
+xlim([0 1])
+title('Constant koff=100 and RuOff=25')
+
+subplot(3,1,3);
+hold on;
+plot(TS_Time{25},TS_TF3{25},':k','LineWidth',.5,'MarkerSize',2),hold on
+label7=['koff=100 RuOff=100 CaOff=5'];
+plot(TS_Time{26},TS_TF3{26},'-r','LineWidth',.5,'MarkerSize',2),hold on
+label8=['koff=100 RuOff=100 CaOff=25'];
+plot(TS_Time{27},TS_TF3{27},'-b','LineWidth',.5,'MarkerSize',2),hold on
+label9=['koff=100 RuOff=100 CaOff=100'];
+plot(Time,Ca_Level/CaMax,'--k'),hold on
+labelCa=['Normalized Ca Transient'];
+legend(label7,label8,label9,labelCa)
+xlabel('Time(s)')
+ylabel('Actins Ca2')
+xlim([0 1])
+title('Constant koff=100 and RuOff=100')
+
+%% Plotting TF fraction and XB Fractions
+clf(figure(30))
+subplot(3,1,1);
+hold on;
+plot(TS_Time{1},TS_XBfrac{1},'-m','LineWidth',.25,'MarkerSize',2),hold on
+label1=['koff=5 RuOff=5 CaOff=5'];
+plot(TS_Time{2},TS_XBfrac{2},'--c','LineWidth',.25,'MarkerSize',2),hold on
+label2=['koff=5 RuOff=5 CaOff=25'];
+plot(TS_Time{3},TS_XBfrac{3},':r','LineWidth',.25,'MarkerSize',2),hold on
+label3=['koff=5 RuOff=5 CaOff=100'];
+Legend(label1,label2,label3)
+xlabel('Time(s)')
+ylabel('Fraction Bound')
+xlim([0 1])
+title('Constant koff=5')
+
+
+subplot(3,1,2);
+hold on;
+plot(TS_Time{4},TS_XBfrac{4},'-.g','LineWidth',.25,'MarkerSize',2),hold on
+label4=['koff=5 RuOff=25 CaOff 5'];
+plot(TS_Time{5},TS_XBfrac{5},'-b','LineWidth',.25,'MarkerSize',2),hold on
+label5=['koff=5 RuOff=25 CaOff=25'];
+plot(TS_Time{6},TS_XBfrac{6},'--k','LineWidth',.25,'MarkerSize',2),hold on
+label6=['koff=5 RuOff=25 CaOff=100'];
+legend(label4,label5,label6)
+xlabel('Time(s)')
+ylabel('Fraction Bound')
+xlim([0 1])
+
+subplot(3,1,3);
+hold on;
+plot(TS_Time{7},TS_XBfrac{7},':k','LineWidth',.25,'MarkerSize',2),hold on
+label7=['koff=5 RuOff=100 CaOff=5'];
+plot(TS_Time{8},TS_XBfrac{8},'-.r','LineWidth',.25,'MarkerSize',2),hold on
+label8=['koff=5 RuOff=100 CaOff=25'];
+plot(TS_Time{9},TS_XBfrac{9},'--b','LineWidth',.25,'MarkerSize',2),hold on
+label9=['koff=5 RuOff=100 CaOff=100'];
+legend(label7,label8,label9)
+xlabel('Time(s)')
+ylabel('Fraction Bound')
+xlim([0 1])
+
+%% Fraction Bound koff=25
+clf(figure(31))
+subplot(3,1,1);
+hold on;
+plot(TS_Time{10},TS_XBfrac{10},'-m','LineWidth',.25,'MarkerSize',2),hold on
+label1=['koff=25 RuOff=5 CaOff=5'];
+plot(TS_Time{11},TS_XBfrac{11},'--c','LineWidth',.25,'MarkerSize',2),hold on
+label2=['koff=25 RuOff=5 CaOff=25'];
+plot(TS_Time{12},TS_XBfrac{12},':r','LineWidth',.25,'MarkerSize',2),hold on
+label3=['koff=25 RuOff=5 CaOff=100'];
+Legend(label1,label2,label3)
+xlabel('Time(s)')
+ylabel('Fraction Bound')
+xlim([0 1])
+title('Constant koff=5')
+
+
+subplot(3,1,2);
+hold on;
+plot(TS_Time{13},TS_XBfrac{13},'-.g','LineWidth',.25,'MarkerSize',2),hold on
+label4=['koff=25 RuOff=25 CaOff 5'];
+plot(TS_Time{14},TS_XBfrac{14},'-b','LineWidth',.25,'MarkerSize',2),hold on
+label5=['koff=25 RuOff=25 CaOff=25'];
+plot(TS_Time{15},TS_XBfrac{15},'--k','LineWidth',.25,'MarkerSize',2),hold on
+label6=['koff=25 RuOff=25 CaOff=100'];
+legend(label4,label5,label6)
+xlabel('Time(s)')
+ylabel('Fraction Bound')
+xlim([0 1])
+
+subplot(3,1,3);
+hold on;
+plot(TS_Time{16},TS_XBfrac{16},':k','LineWidth',.25,'MarkerSize',2),hold on
+label7=['koff=25 RuOff=100 CaOff=5'];
+plot(TS_Time{17},TS_XBfrac{17},'-.r','LineWidth',.25,'MarkerSize',2),hold on
+label8=['koff=25 RuOff=100 CaOff=25'];
+plot(TS_Time{18},TS_XBfrac{18},'--b','LineWidth',.25,'MarkerSize',2),hold on
+label9=['koff=25 RuOff=100 CaOff=100'];
+legend(label7,label8,label9)
+xlabel('Time(s)')
+ylabel('Fraction Bound')
+xlim([0 1])
+
+%% Fraction bound koff=100
+clf(figure(32))
+subplot(3,1,1);
+hold on;
+plot(TS_Time{19},TS_XBfrac{19},'-m','LineWidth',.25,'MarkerSize',2),hold on
+label1=['koff=100 RuOff=5 CaOff=5'];
+plot(TS_Time{20},TS_XBfrac{20},'--c','LineWidth',.25,'MarkerSize',2),hold on
+label2=['koff=100 RuOff=5 CaOff=25'];
+plot(TS_Time{21},TS_XBfrac{21},':r','LineWidth',.25,'MarkerSize',2),hold on
+label3=['koff=100 RuOff=5 CaOff=100'];
+Legend(label1,label2,label3)
+xlabel('Time(s)')
+ylabel('Fraction Bound')
+xlim([0 1])
+title('Constant koff=5')
+
+
+subplot(3,1,2);
+hold on;
+plot(TS_Time{22},TS_XBfrac{22},'-.g','LineWidth',.25,'MarkerSize',2),hold on
+label4=['koff=100 RuOff=25 CaOff 5'];
+plot(TS_Time{23},TS_XBfrac{23},'-b','LineWidth',.25,'MarkerSize',2),hold on
+label5=['koff=100 RuOff=25 CaOff=25'];
+plot(TS_Time{24},TS_XBfrac{24},'--k','LineWidth',.25,'MarkerSize',2),hold on
+label6=['koff=100 RuOff=25 CaOff=100'];
+legend(label4,label5,label6)
+xlabel('Time(s)')
+ylabel('Fraction Bound')
+xlim([0 1])
+
+subplot(3,1,3);
+hold on;
+plot(TS_Time{25},TS_XBfrac{25},':k','LineWidth',.25,'MarkerSize',2),hold on
+label7=['koff=100 RuOff=100 CaOff=5'];
+plot(TS_Time{26},TS_XBfrac{26},'-.r','LineWidth',.25,'MarkerSize',2),hold on
+label8=['koff=100 RuOff=100 CaOff=25'];
+plot(TS_Time{27},TS_XBfrac{27},'--b','LineWidth',.25,'MarkerSize',2),hold on
+label9=['koff=100 RuOff=100 CaOff=100'];
+legend(label7,label8,label9)
+xlabel('Time(s)')
+ylabel('Fraction Bound')
+xlim([0 1])
 
 %% Plotting koff=5 
 clf(figure(2))

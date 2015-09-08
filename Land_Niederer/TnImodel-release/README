@@ -1,0 +1,40 @@
+
+
+This contains the MATLAB code for the model described in:
+
+Sander Land and Steven Niederer
+A Spatially Detailed Model of Isometric Contraction Based on Competitive Binding of Troponin I Explains Cooperative Interactions between Tropomyosin and Crossbridges
+PLoS Computational Biology, 2015
+
+For questions and requests for additional code, contact Sander Land (sander.land@gmail.com)
+
+---------------------------------------------------------------------------------------------
+
+File descriptions:
+
+make_dy.m              : Function to obtain the ODEs for the dynamic model
+dynamic_xb_prep.m      : Helper function to prepare for make_dy, creates options struct for dynamic model running
+set_options.m          : Helper function to prepare for dynamic_xb_prep and other functions
+SE26_2.0.mat	       : SE_ij resulting for sampling for 26 RU and gamma=2.0 -- original sampling files too big for inclusion here (>1GB) but available on request.
+
+figures/dynamic_twitch_species.m : Generates Figure 7
+figures/fpca.m                   : Generates Figure 6
+figures/make_ca.m                : Generates calcium transient used for the human dynamic simulations
+
+---------------------------------------------------------------------------------------------
+Typical use is:
+
+1. Set options, e.g.
+options = dynamic_xb_prep('param1',value,'param2',value) 
+or
+options = dynamic_xb_prep('mouse') 
+
+2. Create a function which interpolates your Ca transient and options, e.g.
+f=@(t,y) make_dy(t,y,interp1(0:167,Cai,mod(t,167)),options);
+
+3. Solve
+[t,y] = ode23t(@(t,y) f(t,y),0:1:(6*167), options.y0);
+
+
+
+

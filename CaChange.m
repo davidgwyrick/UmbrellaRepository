@@ -22,13 +22,15 @@ switch Ca_protocol
         CaChange_index(550:550+pulse_width) = 10^(-New_pCa);
         CaChange_index(1000:1000+pulse_width) = 10^(-New_pCa);
         
-    case 'Twitch'
+    case 'Twitch' %Need to add 'zero value' for Ca Transient; i.e. start at Resting Diastolic [Ca]
         CaChange_index = (0.25*10^-7)*ones(NSTEPS,1);
         Ca_0 = 0.14*10^(-6); % 0.1399*10^(-6)molar Resting Diastolic Calcium concentration 
         Ca_max =10^(-New_pCa); %0.3431*10^(-6)molar is pCa of 6.46 Ca Transient Max concentration at Time to Peak (48.2ms)
         tao=DetermineTaoParam(pulse_width,New_pCa);
-        for indy=1:NSTEPS  
-            CaChange_index(indy) = Ca_0 + (Ca_max - Ca_0)*(indy/tao)*exp(1-(indy/tao));
+        for indy=1:NSTEPS 
+%             if indy == 1, CaChange_index(indy)=Ca_0; end
+%             if indy ~=1, indy=indy-1; end
+            CaChange_index(indy) = Ca_0 + (Ca_max - Ca_0)*((indy-1)/tao)*exp(1-(indy/tao));
         end
 %Still working on the multiple twitch code        
     case 'MultipleTwitch'

@@ -5,7 +5,7 @@
 %%
 clc 
 % Enables parallel language features like parfor
-if matlabpool('size') == 0, matlabpool(2), end
+if matlabpool('size') == 0, matlabpool(4), end
 
 TnDensitiesUniform = [];
 TnDensitiesRandom = 1;
@@ -28,13 +28,13 @@ init_params;
 %% Testing TF Rates (9/3/15)
 
 Koff_range = [5 25 100];
-RuOff_range = [5 25 100];
-CaOff_range = [5 25 100];
+RuOff_range = [5];
+CaOff_range = [100];
 
 %% Timer/Time Calculation
 NumRuns = 4;
-%pCaV = [4.0, 4.5, 5.0, 5.5, 5.7, 5.8 6];
-pCaV = [4];
+pCaV = [4.5, 5.0, 5.5, 5.7, 5.8, 5.9, 6.0, 6.1, 6.25, 6.5, 7.0];
+%pCaV = [4];
 HalfSL_Range = [1210];
 Pulse_Width_Range = [90]; %number of ms of Ca2+ pulse
 NumTwitch = 2; %number of twitches Max: 3 twitches
@@ -50,11 +50,11 @@ Muscle_Type_Range = {'Soleus'};
 calc_sim_time(NumRuns, pCaV, HalfSL_Range, Pulse_Width_Range, Rate_Range, Muscle_Type_Range);
 tStart = tic;
 %% Type of Ca profile for twitch analysis
-%Ca_protocol = 'None';
+Ca_protocol = 'None';
 % Ca_protocol = 'Step';
 %Ca_protocol = 'Burst';
 % Ca_protocol = 'Train';
-Ca_protocol = 'Twitch';
+%Ca_protocol = 'Twitch';
 %Ca_protocol = 'MultipleTwitch';
 %% 
 
@@ -112,6 +112,7 @@ for ipulse_width = 1:length(Pulse_Width_Range) %Loopthrough/do simulations on di
                                         %Fix String Array later
                                         %if pCa_index ==1, OutDir_Array=OutDir; else OutDir_Array=Strcat(OutDir_Array,OutDir);end
                                         OutDir = ['DataFiles' filesep 'TFrates_koff=',num2str(Koff), ' RuOff=',num2str(RuOff),' CaOff=',num2str(CaOff) filesep];
+                                        OutDir = ['DataFiles' filesep 'SS_TFrates_koff=',num2str(Koff), ' RuOff=',num2str(RuOff),' CaOff=',num2str(CaOff) filesep];
                                         mkdir(OutDir);
                                         save([OutDir filesep 'Parameters.mat']);
                                         
