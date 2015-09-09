@@ -27,13 +27,13 @@ init_params;
 % GausPeak_range = [2000];%, 2400, 1600];
 %% Testing TF Rates (9/3/15)
 
-Koff_range = [5 25 100];
+Koff_range = [100];
 RuOff_range = [5];
 CaOff_range = [100];
 
 %% Timer/Time Calculation
 NumRuns = 4;
-pCaV = [4.5, 5.0, 5.5, 5.7, 5.8, 5.9, 6.0, 6.1, 6.25, 6.5, 7.0];
+pCaV = [4 4.5, 5.0, 5.5, 5.7, 5.8, 5.9, 6.0, 6.1, 6.25, 6.5, 7.0];
 %pCaV = [4];
 HalfSL_Range = [1210];
 Pulse_Width_Range = [90]; %number of ms of Ca2+ pulse
@@ -112,7 +112,7 @@ for ipulse_width = 1:length(Pulse_Width_Range) %Loopthrough/do simulations on di
                                         %Fix String Array later
                                         %if pCa_index ==1, OutDir_Array=OutDir; else OutDir_Array=Strcat(OutDir_Array,OutDir);end
                                         OutDir = ['DataFiles' filesep 'TFrates_koff=',num2str(Koff), ' RuOff=',num2str(RuOff),' CaOff=',num2str(CaOff) filesep];
-                                        OutDir = ['DataFiles' filesep 'SS_TFrates_koff=',num2str(Koff), ' RuOff=',num2str(RuOff),' CaOff=',num2str(CaOff) filesep];
+                                        OutDir = ['DataFiles' filesep 'TFrates_koff=',num2str(Koff), ' RuOff=',num2str(RuOff),' CaOff=',num2str(CaOff) filesep];
                                         mkdir(OutDir);
                                         save([OutDir filesep 'Parameters.mat']);
                                         
