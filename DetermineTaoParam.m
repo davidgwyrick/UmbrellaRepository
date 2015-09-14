@@ -27,8 +27,8 @@ for ii=1:100,
     PW_found=0;
     [mm mm_index] =max(Ca_t);
     for jj=1:length(Ca_t),
-        if jj > mm_index && PW_found == 0 &&  or(Ca_t(jj) < .01*mm,Ca_t(jj) <1.01*Ca_0)
-            tao_cell(ii,2)=jj; %Time for Ca profile curve to reach 99% relaxation
+        if jj > mm_index && PW_found == 0 &&  or(Ca_t(jj) < .1*mm,Ca_t(jj) <1.1*Ca_0)
+            tao_cell(ii,2)=jj; %Time for Ca profile curve to reach 90% relaxation
             PW_found=1;
         end
     end

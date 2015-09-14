@@ -27,16 +27,16 @@ init_params;
 % GausPeak_range = [2000];%, 2400, 1600];
 %% Testing TF Rates (9/3/15)
 
-Koff_range = [100];
-RuOff_range = [5];
+Koff_range = [150];
+RuOff_range = [100];
 CaOff_range = [100];
 
 %% Timer/Time Calculation
-NumRuns = 4;
-pCaV = [4 4.5, 5.0, 5.5, 5.7, 5.8, 5.9, 6.0, 6.1, 6.25, 6.5, 7.0];
-%pCaV = [4];
+NumRuns = 12;
+%pCaV = [4 4.5, 5.0, 5.5, 5.7, 5.8, 5.9, 6.0, 6.1, 6.25, 6.5, 7.0];
+pCaV = [5.6];
 HalfSL_Range = [1210];
-Pulse_Width_Range = [90]; %number of ms of Ca2+ pulse
+Pulse_Width_Range = [160]; %number of ms of Ca2+ pulse
 NumTwitch = 2; %number of twitches Max: 3 twitches
 TimeBtwTwitches = [505]; %number of ms btw peak of pulses; i.e. if the pulse width range were 50ms and you
 % inputed a timeBtwTwitches to be 35ms, then the start of the second twitch
@@ -50,12 +50,19 @@ Muscle_Type_Range = {'Soleus'};
 calc_sim_time(NumRuns, pCaV, HalfSL_Range, Pulse_Width_Range, Rate_Range, Muscle_Type_Range);
 tStart = tic;
 %% Type of Ca profile for twitch analysis
-Ca_protocol = 'None';
-% Ca_protocol = 'Step';
+%Ca_protocol = 'None';
+%Ca_protocol = 'Step';
 %Ca_protocol = 'Burst';
-% Ca_protocol = 'Train';
-%Ca_protocol = 'Twitch';
+%Ca_protocol = 'Train';
+Ca_protocol = 'Twitch';
 %Ca_protocol = 'MultipleTwitch';
+
+%Ca_protocol = 'LandTwitchHuman';
+Ca_protocol = 'LandTwitchRat';
+%Ca_protocol = 'LandTwitchMouse';
+CaProfile_Scalar = 1; %0 if you do NOT want to scale Land's calcium profile transients;
+%1 if you do; if you enter 1, the profile will be moved to a diastolic Ca
+%concentration of pCa=8 and the peak value will be given by pCaV
 %% 
 
 % for ieta_range = 1:length(eta_range);
@@ -111,13 +118,13 @@ for ipulse_width = 1:length(Pulse_Width_Range) %Loopthrough/do simulations on di
                                         %if strcmp(Ca_protocol,'None') == 1, OutDir = ['DataFiles' filesep 'SteadyStateCaOff=20_koff=50' filesep]; else OutDir = ['DataFiles' filesep num2str(pulse_width), 'ms', Ca_protocol filesep];end
                                         %Fix String Array later
                                         %if pCa_index ==1, OutDir_Array=OutDir; else OutDir_Array=Strcat(OutDir_Array,OutDir);end
-                                        OutDir = ['DataFiles' filesep 'TFrates_koff=',num2str(Koff), ' RuOff=',num2str(RuOff),' CaOff=',num2str(CaOff) filesep];
-                                        OutDir = ['DataFiles' filesep 'TFrates_koff=',num2str(Koff), ' RuOff=',num2str(RuOff),' CaOff=',num2str(CaOff) filesep];
+%                                         OutDir = ['DataFiles' filesep 'TFrates_koff=',num2str(Koff), ' RuOff=',num2str(RuOff),' CaOff=',num2str(CaOff) filesep];
+                                        OutDir = ['DataFiles' filesep 'CaTransient' filesep 'Scaled_',Ca_protocol,'_pCapeak=',num2str(pCa_in) filesep];
                                         mkdir(OutDir);
                                         save([OutDir filesep 'Parameters.mat']);
                                         
                                         disp( [ 'pCa = ' num2str( pCa_in )])
-                                        [Steps, Stats, IndexThalf, Binder] = RunSeveral(NumRuns, DataParams, Muscle_Type, StartLength, pCa_in, StiffScale, filaments, knockout, coop, TFRateScale, tcparam, Rate, Ca_protocol, pulse_width,NumTwitch,TimeBtwTwitches,Koff,RuOff,CaOff);
+                                        [Steps, Stats, IndexThalf, Binder] = RunSeveral(NumRuns, DataParams, Muscle_Type, StartLength, pCa_in, StiffScale, filaments, knockout, coop, TFRateScale, tcparam, Rate, Ca_protocol, pulse_width,NumTwitch,TimeBtwTwitches,Koff,RuOff,CaOff,CaProfile_Scalar);
                                         WriteText(OutDir, pCa_in, DataParams.dt, Binder, Steps, Stats, IndexThalf);
                                         WriteTon(DataParams.dt, OutDir, pCa_in, OutDir, knockout.XB_Fraction, Stats);
 %                                         clf(figure(1))

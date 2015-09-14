@@ -1,4 +1,4 @@
-function [Steps, Stats, IndexThalf, Binder] = RunSeveral(RequestedRuns, DataParams, Muscle_Type, StartLength, pCa, StiffScale, filaments, knockout, coop, TFRateScale, tcparam, Rate, Ca_protocol, pulse_width, NumTwitch, TimeBtwTwitches,Koff,RuOff,CaOff)
+function [Steps, Stats, IndexThalf, Binder] = RunSeveral(RequestedRuns, DataParams, Muscle_Type, StartLength, pCa, StiffScale, filaments, knockout, coop, TFRateScale, tcparam, Rate, Ca_protocol, pulse_width, NumTwitch, TimeBtwTwitches,Koff,RuOff,CaOff,CaProfile_Scalar)
 
 %% Calcium Level in Molar
 Ca = 10^(-pCa); 
@@ -15,7 +15,7 @@ NSTEPS = ceil(maxt/dt); % number of simulation steps to do.
 [SL_EndLength, NSTEPS, ROI_index] = LengthChange(StartLength, NSTEPS, Rate, DataParams); %Returns index of handle position for each step, as well as # of steps to add; Assumes thin filiment length of 1119nM.
 
 %% SETUP Ca level change index 
-[CaChange_index] = CaChange(Ca_protocol, pCa, NSTEPS, pulse_width, NumTwitch, TimeBtwTwitches);
+[CaChange_index] = CaChange(Ca_protocol, pCa, NSTEPS, pulse_width, NumTwitch, TimeBtwTwitches,CaProfile_Scalar);
 
 %% Calculates the total number of runs 
 if (RequestedRuns == 0),TotalRuns = SimRuns(6400, DataSpan, NSTEPS, maxt); else TotalRuns = RequestedRuns; end
