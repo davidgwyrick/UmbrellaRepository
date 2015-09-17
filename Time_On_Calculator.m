@@ -43,6 +43,7 @@ function [temp_Prior, Total] = Time_On_Calculator(X, Current, temp_Prior, Total,
 %%%%%%%%%%%%% Process the t-on stuff
 %%%%%%%%%%%%% Process the t-on stuff
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+if current_step == 300,disp(['Step ' num2str( current_step ) ' for debugging']);end
 
 %% Now process the Run Index counts
 I = find(Current(:,2)>0); %% Grab the rows
@@ -59,9 +60,8 @@ BinderCols=23;
 
 %% Do we have any bridges?  If so, we need to account for them.
 if not(isempty(I))
-    % If we never had briges before we need to initialize some
-    % variables.
-    if (isempty(Total))
+    %% If we never had briges before we need to initialize some variables
+       if (isempty(Total))
         %% Update the big matrix for all the current binding
         for iCount=1:Now_Bound_Length  %% Update our Run Matrix
             %            RunCount=RunCount+1; %% Yeah, we have a bridge--update

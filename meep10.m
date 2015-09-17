@@ -5,21 +5,23 @@
 % data of a 90ms twitch at pCa of 4.0
 %%
 
+% Koff_range = [5 25 100];
+% RuOff_range = [5 25 100];
+% CaOff_range = [5 25 100];
+
 Koff_range = [5 25 100];
 RuOff_range = [5 25 100];
-CaOff_range = [5 25 100];
-
-
+CaOff_range = [100 150];
 pCaV = [4];
 Pulse_Width_Range = [90]; %number of ms of Ca2+ pulse
 
-TS_Time=cell(1,27);
-TS_Force=cell(1,27);
-TS_CaLevel=cell(1,27);
-TS_XBfrac=cell(1,27); %XB Fraction Bound
-TS_TF1=cell(1,27); %Actins Ca0
-TS_TF2=cell(1,27); %Actins Ca1
-TS_TF3=cell(1,27); %Actins Ca2
+TS_Time=cell(1,18);
+TS_Force=cell(1,18);
+TS_CaLevel=cell(1,18);
+TS_XBfrac=cell(1,18); %XB Fraction Bound
+TS_TF1=cell(1,18); %Actins Ca0
+TS_TF2=cell(1,18); %Actins Ca1
+TS_TF3=cell(1,18); %Actins Ca2
 
 %% Loop To gather data
 index=1;
@@ -47,9 +49,9 @@ end
 
 %% Find Max values and Time to 50%/90% Relaxation
 
-TF_Relax=zeros(27,2);
-MaxForce=zeros(27,2);
-for ii=1:27
+TF_Relax=zeros(18,2);
+MaxForce=zeros(18,2);
+for ii=1:18
     Force=TS_Force{ii};
     Time=TS_Time{ii};
     RT90_found=0;
@@ -76,9 +78,9 @@ for ii=1:27
 end
 
 %% Normalized Ca Transient
-Ca_Level=TS_CaLevel{21};
+Ca_Level=TS_CaLevel{18};
 for ii=1:length(Ca_Level), Ca_Level(ii)=10^(-Ca_Level(ii));end
-Time=TS_Time{21};
+Time=TS_Time{18};
 [CaMax Max_index]=max(Ca_Level);
 plot(Time,Ca_Level/CaMax,'--k'),hold on
 axis([-.1 1 0 1]);
@@ -409,40 +411,36 @@ clf(figure(2))
 subplot(3,1,1);
 hold on;
 plot(TS_Time{1},TS_Force{1},'-m','LineWidth',.25,'MarkerSize',2),hold on
-label1=['koff=5 RuOff=5 CaOff=5'];
+label1=['koff=5 RuOff=5 CaOff=100'];
 plot(TS_Time{2},TS_Force{2},'--c','LineWidth',.25,'MarkerSize',2),hold on
-label2=['koff=5 RuOff=5 CaOff=25'];
-plot(TS_Time{3},TS_Force{3},':r','LineWidth',.25,'MarkerSize',2),hold on
-label3=['koff=5 RuOff=5 CaOff=100'];
-Legend(label1,label2,label3)
+label2=['koff=5 RuOff=5 CaOff=150'];
+Legend(label1,label2)
 xlabel('Time(s)')
 ylabel('Force (pN)')
 xlim([0 1])
-title('Constant koff=5')
+title('Constant koff=5,RuOff=5,KaTnI=100')
 
 
 subplot(3,1,2);
 hold on;
-plot(TS_Time{4},TS_Force{4},'-.g','LineWidth',.25,'MarkerSize',2),hold on
-label4=['koff=5 RuOff=25 CaOff 5'];
-plot(TS_Time{5},TS_Force{5},'-b','LineWidth',.25,'MarkerSize',2),hold on
-label5=['koff=5 RuOff=25 CaOff=25'];
-plot(TS_Time{6},TS_Force{6},'--k','LineWidth',.25,'MarkerSize',2),hold on
-label6=['koff=5 RuOff=25 CaOff=100'];
-legend(label4,label5,label6)
+plot(TS_Time{3},TS_Force{3},'-.g','LineWidth',.25,'MarkerSize',2),hold on
+label4=['koff=5 RuOff=25 CaOff=100'];
+plot(TS_Time{4},TS_Force{4},'-b','LineWidth',.25,'MarkerSize',2),hold on
+label5=['koff=5 RuOff=25 CaOff=150'];
+title('Constant koff=5,RuOff=25,KaTnI=100')
+legend(label4,label5)
 xlabel('Time(s)')
 ylabel('Force (pN)')
 xlim([0 1])
 
 subplot(3,1,3);
 hold on;
-plot(TS_Time{7},TS_Force{7},':k','LineWidth',.25,'MarkerSize',2),hold on
-label7=['koff=5 RuOff=100 CaOff=5'];
-plot(TS_Time{8},TS_Force{8},'-.r','LineWidth',.25,'MarkerSize',2),hold on
-label8=['koff=5 RuOff=100 CaOff=25'];
-plot(TS_Time{9},TS_Force{9},'--b','LineWidth',.25,'MarkerSize',2),hold on
-label9=['koff=5 RuOff=100 CaOff=100'];
-legend(label7,label8,label9)
+plot(TS_Time{5},TS_Force{5},':k','LineWidth',.25,'MarkerSize',2),hold on
+label7=['koff=5 RuOff=100 CaOff=100'];
+plot(TS_Time{6},TS_Force{6},'-.r','LineWidth',.25,'MarkerSize',2),hold on
+label8=['koff=5 RuOff=100 CaOff=150'];
+title('Constant koff=5,RuOff=100,KaTnI=100')
+legend(label7,label8)
 xlabel('Time(s)')
 ylabel('Force (pN)')
 xlim([0 1])
@@ -452,41 +450,39 @@ xlim([0 1])
 clf(figure(3))
 subplot(3,1,1);
 hold on;
-plot(TS_Time{10},TS_Force{10},'-m','LineWidth',.25,'MarkerSize',2),hold on
-label1=['koff=25 RuOff=5 CaOff=5'];
-plot(TS_Time{11},TS_Force{11},'--c','LineWidth',.25,'MarkerSize',2),hold on
-label2=['koff=25 RuOff=5 CaOff=25'];
-plot(TS_Time{12},TS_Force{12},':r','LineWidth',.25,'MarkerSize',2),hold on
-label3=['koff=25 RuOff=5 CaOff=100'];
-Legend(label1,label2,label3)
+plot(TS_Time{7},TS_Force{7},'-m','LineWidth',.25,'MarkerSize',2),hold on
+label1=['koff=25 RuOff=5 CaOff=100'];
+plot(TS_Time{8},TS_Force{8},'--c','LineWidth',.25,'MarkerSize',2),hold on
+label2=['koff=25 RuOff=5 CaOff=150'];
+
+Legend(label1,label2)
 xlabel('Time(s)')
 ylabel('Force (pN)')
 xlim([0 1])
-title('Constant koff=25')
+title('Constant koff=25, Ruoff=5, KaTnI=100')
 
 
 subplot(3,1,2);
 hold on;
-plot(TS_Time{13},TS_Force{13},'-.g','LineWidth',.25,'MarkerSize',2),hold on
-label4=['koff=25 RuOff=25 CaOff 5'];
-plot(TS_Time{14},TS_Force{14},'-b','LineWidth',.25,'MarkerSize',2),hold on
-label5=['koff=25 RuOff=25 CaOff=25'];
-plot(TS_Time{15},TS_Force{15},'--k','LineWidth',.25,'MarkerSize',2),hold on
-label6=['koff=25 RuOff=25 CaOff=100'];
-legend(label4,label5,label6)
+plot(TS_Time{9},TS_Force{9},'-.g','LineWidth',.25,'MarkerSize',2),hold on
+label4=['koff=25 RuOff=25 CaOff=100'];
+plot(TS_Time{10},TS_Force{10},'-b','LineWidth',.25,'MarkerSize',2),hold on
+label5=['koff=25 RuOff=25 CaOff=150'];
+title('Constant koff=25, Ruoff=25, KaTnI=100')
+legend(label4,label5)
 xlabel('Time(s)')
 ylabel('Force (pN)')
 xlim([0 1])
 
 subplot(3,1,3);
 hold on;
-plot(TS_Time{16},TS_Force{16},':k','LineWidth',.25,'MarkerSize',2),hold on
-label7=['koff=25 RuOff=100 CaOff=5'];
-plot(TS_Time{17},TS_Force{17},'-.r','LineWidth',.25,'MarkerSize',2),hold on
-label8=['koff=25 RuOff=100 CaOff=25'];
-plot(TS_Time{18},TS_Force{18},'--b','LineWidth',.25,'MarkerSize',2),hold on
-label9=['koff=25 RuOff=100 CaOff=100'];
-legend(label7,label8,label9)
+plot(TS_Time{11},TS_Force{11},':k','LineWidth',.25,'MarkerSize',2),hold on
+label7=['koff=25 RuOff=100 CaOff=100'];
+plot(TS_Time{12},TS_Force{12},'-.r','LineWidth',.25,'MarkerSize',2),hold on
+label8=['koff=25 RuOff=100 CaOff=150'];
+
+legend(label7,label8)
+title('Constant koff=25, Ruoff=100, KaTnI=100')
 xlabel('Time(s)')
 ylabel('Force (pN)')
 xlim([0 1])
@@ -496,41 +492,40 @@ xlim([0 1])
 clf(figure(4))
 subplot(3,1,1);
 hold on;
-plot(TS_Time{19},TS_Force{19},'-m','LineWidth',.25,'MarkerSize',2),hold on
-label1=['koff=100 RuOff=5 CaOff=5'];
-plot(TS_Time{20},TS_Force{20},'--c','LineWidth',.25,'MarkerSize',2),hold on
-label2=['koff=100 RuOff=5 CaOff=25'];
-plot(TS_Time{21},TS_Force{21},':r','LineWidth',.25,'MarkerSize',2),hold on
-label3=['koff=100 RuOff=5 CaOff=100'];
-Legend(label1,label2,label3)
+plot(TS_Time{13},TS_Force{13},'-m','LineWidth',.25,'MarkerSize',2),hold on
+label1=['koff=100 RuOff=5 CaOff=100'];
+plot(TS_Time{14},TS_Force{14},'--c','LineWidth',.25,'MarkerSize',2),hold on
+label2=['koff=100 RuOff=5 CaOff=150'];
+
+Legend(label1,label2)
 xlabel('Time(s)')
 ylabel('Force (pN)')
 xlim([0 1])
-title('Constant koff=100')
+title('Constant koff=100, RuOff=5, KaTnI=100')
 
 
 subplot(3,1,2);
 hold on;
-plot(TS_Time{22},TS_Force{22},'-.g','LineWidth',.25,'MarkerSize',2),hold on
-label4=['koff=100 RuOff=25 CaOff 5'];
-plot(TS_Time{23},TS_Force{23},'-b','LineWidth',.25,'MarkerSize',2),hold on
-label5=['koff=100 RuOff=25 CaOff=25'];
-plot(TS_Time{24},TS_Force{24},'--k','LineWidth',.25,'MarkerSize',2),hold on
-label6=['koff=100 RuOff=25 CaOff=100'];
-legend(label4,label5,label6)
+plot(TS_Time{15},TS_Force{15},'-.g','LineWidth',.25,'MarkerSize',2),hold on
+label4=['koff=100 RuOff=25 CaOff=100'];
+plot(TS_Time{16},TS_Force{16},'-b','LineWidth',.25,'MarkerSize',2),hold on
+label5=['koff=100 RuOff=25 CaOff=150'];
+
+legend(label4,label5)
+title('Constant koff=100, RuOff=25, KaTnI=100')
 xlabel('Time(s)')
 ylabel('Force (pN)')
 xlim([0 1])
 
 subplot(3,1,3);
 hold on;
-plot(TS_Time{25},TS_Force{25},':k','LineWidth',.25,'MarkerSize',2),hold on
-label7=['koff=100 RuOff=100 CaOff=5'];
-plot(TS_Time{26},TS_Force{26},'-.r','LineWidth',.25,'MarkerSize',2),hold on
-label8=['koff=100 RuOff=100 CaOff=25'];
-plot(TS_Time{27},TS_Force{27},'--b','LineWidth',.25,'MarkerSize',2),hold on
-label9=['koff=100 RuOff=100 CaOff=100'];
-legend(label7,label8,label9)
+plot(TS_Time{17},TS_Force{17},':k','LineWidth',.25,'MarkerSize',2),hold on
+label7=['koff=100 RuOff=100 CaOff=100'];
+plot(TS_Time{18},TS_Force{18},'-.r','LineWidth',.25,'MarkerSize',2),hold on
+label8=['koff=100 RuOff=100 CaOff=150'];
+
+legend(label7,label8)
+title('Constant koff=100, RuOff=100, KaTnI=100')
 xlabel('Time(s)')
 ylabel('Force (pN)')
 xlim([0 1])

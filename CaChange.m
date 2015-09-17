@@ -73,7 +73,7 @@ switch Ca_protocol
         filename=['HumanCai.txt'];
         filepath=['J:\TannerBertGroup\Sims\David_Wyrick\UmbrellaRepository\DataFiles\CaTransient\',filename];
         humanCai=importdata(filepath);
-        hmin=min(humanCai)-.01;
+        hmin=min(humanCai);
         CaChange_index = ones(NSTEPS,1);
         CaScalar=10^(-New_pCa)/(max(humanCai)*10^(-6)-hmin*10^(-6));
         
@@ -95,7 +95,7 @@ switch Ca_protocol
         filename=['ratCai.txt'];
         filepath=['J:\TannerBertGroup\Sims\David_Wyrick\UmbrellaRepository\DataFiles\CaTransient\',filename];
         ratCai=importdata(filepath);
-        rmin=min(ratCai)-.01;
+        rmin=min(ratCai);
         CaScalar=10^(-New_pCa)/(max(ratCai)*10^(-6)-rmin*10^(-6));
         CaChange_index = ones(NSTEPS,1);
         
@@ -118,7 +118,7 @@ switch Ca_protocol
         filename=['mouseCai.txt'];
         filepath=['J:\TannerBertGroup\Sims\David_Wyrick\UmbrellaRepository\DataFiles\CaTransient\',filename];
         mouseCai=importdata(filepath);
-        mmin=min(mouseCai)-.01;
+        mmin=min(mouseCai);
         CaScalar=10^(-New_pCa)/(max(mouseCai)*10^(-6)-mmin*10^(-6));
         CaChange_index = ones(NSTEPS,1);
         

@@ -13,7 +13,7 @@ koff=Koff1;%100; %sec-1
 kon = Keq*koff;  % (M*sec)^-1,
 % Second Step, the TnI onto CaTnC
 % Transition State 1 to 2
-KaTnI=1e2*ScaleK2;
+KaTnI=50*ScaleK2;
 RuOff=RuOff1;%1
 RuOn=KaTnI*RuOff;
 % The loop where Ca comes off and the Regulatory unit
@@ -21,5 +21,5 @@ RuOn=KaTnI*RuOff;
 % Thin filament State transition 2 to 0
 Kd=(1/(KaTnI*Keq))*ScaleK3;
 % The Ca being torn off and back to ground state
-CaOff=CaOff1;%5;%2*1e1;
+CaOff=CaOff1;
 CaOn=CaOff/Kd; % The reverse, which essentially cannot happen

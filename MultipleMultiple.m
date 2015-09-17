@@ -5,7 +5,7 @@
 %%
 clc 
 % Enables parallel language features like parfor
-if matlabpool('size') == 0, matlabpool(4), end
+% if matlabpool('size') == 0, matlabpool(4), end
 
 TnDensitiesUniform = [];
 TnDensitiesRandom = 1;
@@ -27,16 +27,16 @@ init_params;
 % GausPeak_range = [2000];%, 2400, 1600];
 %% Testing TF Rates (9/3/15)
 
-Koff_range = [150];
-RuOff_range = [100];
+Koff_range = [100];
+RuOff_range = [25];
 CaOff_range = [100];
 
 %% Timer/Time Calculation
-NumRuns = 12;
+NumRuns = 4;
 %pCaV = [4 4.5, 5.0, 5.5, 5.7, 5.8, 5.9, 6.0, 6.1, 6.25, 6.5, 7.0];
 pCaV = [5.6];
 HalfSL_Range = [1210];
-Pulse_Width_Range = [160]; %number of ms of Ca2+ pulse
+Pulse_Width_Range = [90]; %number of ms of Ca2+ pulse
 NumTwitch = 2; %number of twitches Max: 3 twitches
 TimeBtwTwitches = [505]; %number of ms btw peak of pulses; i.e. if the pulse width range were 50ms and you
 % inputed a timeBtwTwitches to be 35ms, then the start of the second twitch
@@ -54,11 +54,11 @@ tStart = tic;
 %Ca_protocol = 'Step';
 %Ca_protocol = 'Burst';
 %Ca_protocol = 'Train';
-Ca_protocol = 'Twitch';
+%Ca_protocol = 'Twitch';
 %Ca_protocol = 'MultipleTwitch';
 
-%Ca_protocol = 'LandTwitchHuman';
-Ca_protocol = 'LandTwitchRat';
+Ca_protocol = 'LandTwitchHuman';
+%Ca_protocol = 'LandTwitchRat';
 %Ca_protocol = 'LandTwitchMouse';
 CaProfile_Scalar = 1; %0 if you do NOT want to scale Land's calcium profile transients;
 %1 if you do; if you enter 1, the profile will be moved to a diastolic Ca
@@ -119,7 +119,8 @@ for ipulse_width = 1:length(Pulse_Width_Range) %Loopthrough/do simulations on di
                                         %Fix String Array later
                                         %if pCa_index ==1, OutDir_Array=OutDir; else OutDir_Array=Strcat(OutDir_Array,OutDir);end
 %                                         OutDir = ['DataFiles' filesep 'TFrates_koff=',num2str(Koff), ' RuOff=',num2str(RuOff),' CaOff=',num2str(CaOff) filesep];
-                                        OutDir = ['DataFiles' filesep 'CaTransient' filesep 'Scaled_',Ca_protocol,'_pCapeak=',num2str(pCa_in) filesep];
+%                                         OutDir = ['DataFiles' filesep 'CaTransient' filesep 'Scaled_',Ca_protocol,'_pCapeak=',num2str(pCa_in) filesep];
+                                        OutDir = ['DataFiles' filesep 'Test' filesep]
                                         mkdir(OutDir);
                                         save([OutDir filesep 'Parameters.mat']);
                                         
