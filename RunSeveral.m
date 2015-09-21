@@ -7,8 +7,8 @@ Ca = 10^(-pCa);
 DataSpan = DataParams.DataSpan;
 dt=DataParams.dt; % simulation timestep, in seconds
 maxt = SimLength(Ca); % simulation length, in seconds
-NSTEPS = ceil(maxt/dt); % number of simulation steps to do.
-
+%NSTEPS = ceil(maxt/dt); % number of simulation steps to do.
+NSTEPS=1000;
 %% SETUP Length change index and Regions of interest (ROIs) for analysis 
 %Rate = 0; %Length change in (ML/s). (-) for shortening;(+) for lengthing.
 %SS_Steps = NSTEPS;  %Hold on to the number of steps before any length change occurs to be used in SS analysis (just returned by the function)
@@ -186,7 +186,7 @@ FinalATPuse = {};
 disp(['Starting... (' num2str( TotalRuns ) ' runs)'])
 
 % for iTotRun=1:TotalRuns
-for iTotRun=1:TotalRuns
+parfor iTotRun=1:TotalRuns
     tRunStart = tic;
        
     [Binder, TempFractCa0, TempFractCa1, TempFractCa2, TempFractXB1, TempFractXB2, TempMFvec, TempAFvec, TempATPuse] = OneRun(Muscle_Type, Tm_Type, dt, NSTEPS, L_TITIN, LACT, KACT, NACT, LMYO, KMYO, NMYO, NTn, Tn, TnFraction, HARDY, LAUREL, XB_Fraction, ACTNodes, MYONodes, NumSites, NumBridges, Mcore, EndVeccore, N_Thick_Start, CoopPass, TFRatePass, Ca, 1, kxscaler, thermochem, TnKOType, XBKOType, SL_EndLength, CaChange_index, ROI_index);

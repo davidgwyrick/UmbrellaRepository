@@ -40,7 +40,7 @@ for ROI_index = 1:length(ROIRange)
     %                     OutDirectory = ['DataFiles\Rate_',Rate,'_SL_',SL,'_',Shorten,'nm\'];
     
     %% Import Steady-State Force, ATPase, Data
-    InSS_Data=[InDir 'SSData_pCa_' num2str(pCa, '%3.2f') '_ROI_' ROI '.txt'];
+    InSS_Data=[InDir 'TwitchData_pCa_' num2str(pCa, '%3.2f') '_ROI_' ROI '.txt'];
     disp(['Importing Steady State Data: ' InSS_Data])
     SSdata=importdata(InSS_Data);
     SSdata=SSdata.data;
@@ -223,7 +223,7 @@ for ROI_index = 1:length(ROIRange)
     
     %% Write out the raw--not averaged--data
     % Add path to access the write out the file portion...
-    OutFile=[OutDirectory 'SS_ton_Raw_pCa_' num2str(pCa, '%3.2f') '_ROI_' ROI '.txt']; %% Out Raw Data
+    OutFile=[OutDirectory 'Twitch_ton_Raw_pCa_' num2str(pCa, '%3.2f') '_ROI_' ROI '.txt']; %% Out Raw Data
     disp(['Writing Raw Run Data: ' OutFile])
     
     %% Build Header
@@ -289,7 +289,7 @@ for ROI_index = 1:length(ROIRange)
     
     %% Write out the raw--not averaged--data
     % Add path to access the write out the file portion...
-    OutFile2=[OutDirectory 'SS_ton_AVG_pCa_' num2str(pCa, '%3.2f') '_ROI_' ROI '.txt']; %% Out Avg Data
+    OutFile2=[OutDirectory 'Twitch_ton_AVG_pCa_' num2str(pCa, '%3.2f') '_ROI_' ROI '.txt']; %% Out Avg Data
     disp(['Writing Raw Run Data: ' OutFile2])
     
     %% Build Header

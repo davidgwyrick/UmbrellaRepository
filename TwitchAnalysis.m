@@ -1,9 +1,13 @@
-function [Time2Relax] = TwitchAnalysis(OutDir,pCa)
+function [Time2Relax] = TwitchAnalysis(OutDir,pCaR)
 %Simple function to analyze twitch parameters like Time to Peak, time to
 %50% and 90% relaxation, and max force. I use the Averaged max force and
 %index instead of raw max
 %David Wyrick
 %9/16/15
+
+for ii=1:length(pCaR),
+pCa=pCaR(ii);
+disp(pCa)
 
 %% Loads the data
 filepath=[OutDir,'TimeSeriesAvg_pCa_',num2str(pCa,'%1.2f'),'.txt'];
@@ -45,7 +49,7 @@ Time2Relax(2,6)=TS_Time(find(TS_TF3 > 0.1*AvgMax,1,'last')); %Time to 90% relaxa
 %% Write to file in the OutDir given
 OutFile=sprintf('%sTimeToRelax_pCa_%s.txt', OutDir, num2str(pCa, '%3.2f'));
 fid=fopen(OutFile, 'wt' );
-fprintf(fid, 'Tt50 Act\tTt70 Act\tTtPeak\tTt50 Relax\tTt70 Relax\tTt90 Relax\tAvgMax\tRawMax\n');	%header for outfile
+fprintf(fid, 'Tt50 Act\t Tt70 Act\t TtPeak\t Tt50 Relax\t Tt70 Relax\t Tt90 Relax\t AvgMax\t RawMax\n');	%header for outfile
 FormatString=[];
 [~, ColOut]=size(Time2Relax);
 for i=1:ColOut-1 %for all but last
@@ -55,7 +59,7 @@ FormatString=[FormatString, '%10.6f\n'];
 fprintf(fid, FormatString, Time2Relax(1,:));
 fprintf(fid, FormatString, Time2Relax(2,:));
 fclose(fid);
-
+end
 
 end
 

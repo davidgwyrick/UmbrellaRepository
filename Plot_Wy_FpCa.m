@@ -1,10 +1,18 @@
-%pCa_Range = [4.0, 4.5, 5.0, 5.5, 5.7, 5.8, 5.9, 6.0, 6.1, 6.25, 6.5, 7.0, 8.0];
-%pCa_Range= [4 5 5.5 5.75 6 6.5 7 8];
-pCa_Range= [4 4.5 5.0]
-%pCa_Range= [4 5 5.5]
-% Pulse_Width = 400;
-Pulse_Width = 10;
-%RateRange = [0]; %-
+
+pCa_Range= [4, 4.5, 5.0, 5.25, 5.6, 5.75, 6.0];
+pulse_width=[100];
+Ca_protocol='LandHumanTwitch';
+%Ca_protocol = 'Twitch';
+%Ca_protocol = 'MultipleTwitch';
+
+Ca_protocol = 'LandTwitchHuman';
+%Ca_protocol = 'LandTwitchRat';
+%Ca_protocol = 'LandTwitchMouse';
+CaProfile_Scalar = 1; %0 if you do NOT want to scale Land's calcium profile transients;
+%1 if you do; if you enter 1, the profile will be moved to a diastolic Ca
+%concentration of pCa=8 and the peak value will be given by pCaV
+if strcmp(Ca_protocol,'LandTwitchHuman')==1,pulse_width=[400];end 
+if strcmp(Ca_protocol,'LandTwitchMouse')==1 || strcmp(Ca_protocol,'LandTwitchRat')==1,pulse_width=[168];end 
 
 
 % prcnt_Full = zeros(1,length(pCa_Range));

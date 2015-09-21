@@ -79,14 +79,18 @@ switch Ca_protocol
         
         if CaProfile_Scalar == 1,
             for ii=1:length(humanCai),
-                CaChange_index(ii)=CaScalar*(humanCai(ii)*10^(-6)-hmin*10^(-6));
-                index=ii+1;
+                if NSTEPS == 1000 && ii <1001,
+                    CaChange_index(ii)=CaScalar*(humanCai(ii)*10^(-6)-hmin*10^(-6));
+                	index=ii+1;
+                end
             end
             CaChange_index(index:NSTEPS)= 10^(-8);
         else
             for ii=1:length(humanCai),
-                CaChange_index(ii)=humanCai(ii)*10^(-6);
-                index=ii+1;
+                if NSTEPS == 1000 && ii <1001,
+                    CaChange_index(ii)=humanCai(ii)*10^(-6);
+                    index=ii+1;
+                end
             end
             CaChange_index(index:NSTEPS)= min(humanCai);
         end

@@ -89,9 +89,6 @@ X = M\EndVeccore; %backdivide (gaussian elimination) the spring constant(k)
 
 
 for iStep = 1:NSTEPS
-    if iStep == 1000
-        %disp(['Step ' num2str( iStep ) ' for debugging'])
-    end
     TFstate = DispatchCaRegCoop(Tm_Type, NACT, NTn, TFstate, Tn, dt, CoopPass, TFRatePass, Ca, iCa, TnKO);
     for i = 1:length(ROI_index)
         if (iStep>=ROI_index{i}(1)) && (iStep<=ROI_index{i}(length(ROI_index{i})))

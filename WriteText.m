@@ -147,7 +147,7 @@ fclose(fid);     %close the file
 % Build output filename, open file, write header, write data, close file
 % Just as above:
 for i = 1:TotalROIs
-    OutFile=sprintf('%sSSData_pCa_%s_ROI_%s.txt', OutDir, num2str(pCa, '%3.2f'),ROIsAZ(i));
+    OutFile=sprintf('%sTwitchData_pCa_%s_ROI_%s.txt', OutDir, num2str(pCa, '%3.2f'),ROIsAZ(i));
     fid=fopen(OutFile,'w');	%open outfile--tab delimited text
     %Create the output file column header:
     fprintf(fid, 'Run Index\tpCa Value\tThickF(pN)\tVARThick F\tThinF (pN)\tVAR Thin F\tFract. XB1\tVAR F XB1\tFract. XB2\tVAR F XB2\tActins Ca0\tVAR ActCa0\tActins Ca1\tVAR ActCa1\tActins Ca2\tVAR ActCa2\tATP per dt\tVAR ATP dt\tFrct Bound\tVAR XB Bnd\n');	%header for outfile

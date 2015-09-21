@@ -13,7 +13,7 @@ koff=Koff1;%100; %sec-1
 kon = Keq*koff;  % (M*sec)^-1,
 % Second Step, the TnI onto CaTnC
 % Transition State 1 to 2
-KaTnI=50*ScaleK2;
+KaTnI=50*ScaleK2; %Set to 50 now, which was decided bc 100 seemed to fast and 10 too slow
 RuOff=RuOff1;%1
 RuOn=KaTnI*RuOff;
 % The loop where Ca comes off and the Regulatory unit

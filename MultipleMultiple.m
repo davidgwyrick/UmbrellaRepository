@@ -4,8 +4,8 @@
 % Last Updated: 8/19/15
 %%
 clc 
-% Enables parallel language features like parfor
-% if matlabpool('size') == 0, matlabpool(4), end
+%Enables parallel language features like parfor
+if matlabpool('size') == 0, matlabpool(2), end
 
 TnDensitiesUniform = [];
 TnDensitiesRandom = 1;
@@ -32,9 +32,9 @@ RuOff_range = [25];
 CaOff_range = [100];
 
 %% Timer/Time Calculation
-NumRuns = 4;
-%pCaV = [4 4.5, 5.0, 5.5, 5.7, 5.8, 5.9, 6.0, 6.1, 6.25, 6.5, 7.0];
-pCaV = [5.6];
+NumRuns = 12;
+pCaV = [4, 4.5, 5.0, 5.25, 5.6, 5.75, 6.0];
+%pCaV = [5.6];
 HalfSL_Range = [1210];
 Pulse_Width_Range = [90]; %number of ms of Ca2+ pulse
 NumTwitch = 2; %number of twitches Max: 3 twitches
@@ -63,6 +63,8 @@ Ca_protocol = 'LandTwitchHuman';
 CaProfile_Scalar = 1; %0 if you do NOT want to scale Land's calcium profile transients;
 %1 if you do; if you enter 1, the profile will be moved to a diastolic Ca
 %concentration of pCa=8 and the peak value will be given by pCaV
+if strcmp(Ca_protocol,'LandTwitchHuman')==1,Pulse_Width_Range=[400];end 
+if strcmp(Ca_protocol,'LandTwitchMouse')==1 || strcmp(Ca_protocol,'LandTwitchRat')==1,Pulse_Width_Range=[168];end 
 %% 
 
 % for ieta_range = 1:length(eta_range);
@@ -120,7 +122,9 @@ for ipulse_width = 1:length(Pulse_Width_Range) %Loopthrough/do simulations on di
                                         %if pCa_index ==1, OutDir_Array=OutDir; else OutDir_Array=Strcat(OutDir_Array,OutDir);end
 %                                         OutDir = ['DataFiles' filesep 'TFrates_koff=',num2str(Koff), ' RuOff=',num2str(RuOff),' CaOff=',num2str(CaOff) filesep];
 %                                         OutDir = ['DataFiles' filesep 'CaTransient' filesep 'Scaled_',Ca_protocol,'_pCapeak=',num2str(pCa_in) filesep];
-                                        OutDir = ['DataFiles' filesep 'Test' filesep]
+%                                         OutDir = ['DataFiles' filesep 'Test' filesep]
+                                        OutDir = ['DataFiles' filesep 'CalciumTwitchDynamics' filesep num2str(pulse_width),'ms_',Ca_protocol filesep];
+                                        
                                         mkdir(OutDir);
                                         save([OutDir filesep 'Parameters.mat']);
                                         
